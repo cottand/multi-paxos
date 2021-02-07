@@ -1,6 +1,6 @@
 defmodule Scout do
   def start(leader, acceptors, ballot) do
-    for acceptor <- acceptors, do: send acceptor, {:p1a, self(), ballot}
+    for acceptor <- acceptors, do: send(acceptor, {:p1a, self(), ballot})
 
     next(leader, acceptors, acceptors, ballot, MapSet.new())
   end

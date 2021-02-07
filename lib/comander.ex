@@ -1,5 +1,6 @@
 defmodule Commander do
   def start(leader_pid, acceptors, replicas, {ballot, slot, command}) do
+    for acceptor <- acceptors, do: send(acceptor, {:p2a, self(), {ballot, slot, command}})
     next(leader_pid, acceptors, replicas, {ballot, slot, command}, acceptors)
   end
 
