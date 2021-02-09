@@ -81,11 +81,24 @@ defmodule Util do
 
   # node_init
 
-  # Whether this ballot is greater than the other, in lexicographic order
-  @spec ballot_greater?({integer() | nil, pid()}, {integer() | nil, pid()}) :: boolean
-  def ballot_greater?({nil, _}, {_, _}), do: false
+  @type ballot :: {integer(), pid()} | :bottom
 
-  def ballot_greater?({_, _}, {nil, _}), do: true
+  # returns a deterministic float for a ballot, where a ballot with a higher integer
+  # is always bigger than a ballot with a smaller integer independently of PID,
+  # but where two ballots with the same integer can be compared thanks to their PID's
+  # hash deterministically
+  @spec ballot_as_num(ballot()) :: float()
+  def ballot_as_num(:bottom), do: -1000.0
+  def ballot_as_num({num, pid}) do
+    pid = Enum.reduce(inspect(pid), fn char, acc -> char * 31 * acc end)
+    num * 1000.0 + (10.0 / pid )
+  end
+
+  # Whether this ballot is greater than the other, in lexicographic order
+  @spec ballot_greater?(ballot(), ballot()) :: boolean
+  def ballot_greater?(:bottom, _), do: false
+
+  def ballot_greater?(_, :bottom), do: true
 
   def ballot_greater?({this_num, this_pid}, {other_num, other_pid}) do
     if this_num != other_num do
@@ -101,7 +114,7 @@ defmodule Util do
   @type proposal_set :: map()
 
   # {ballot, slot, command}
-  @type pvalues :: MapSet.t({integer(), integer(), any()})
+  @type pvalues :: MapSet.t({ballot(), integer(), any()})
 
   # { slot, command }
   @type proposal :: {integer(), any()}
@@ -127,7 +140,7 @@ defmodule Util do
     not_reached = fn -> raise "not reached" end
 
     slot_with_highest_ballot = fn {slot, ballots} ->
-      {slot, Enum.max_by(ballots, fn {b, _} -> b end, not_reached)}
+      {slot, Enum.max_by(ballots, fn {b, _} -> ballot_as_num(b) end, not_reached)}
     end
 
     # list [{s, {b, c}}]
