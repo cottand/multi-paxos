@@ -20,8 +20,15 @@ defmodule Leader do
 
         next(acceptors, replicas, ballot, proposals, active)
 
+      # pvals :: MapSet.t({ballot, slot, command})
       {:adopted, ^ballot, pvals} ->
-        :TODO_WTF
+        proposals = Util.update_with(proposals, Util.pmax(pvals))
+
+        for {slot, command} <- proposals,
+            do: spawn(Commander, :start, [self(), acceptors, replicas, {ballot, slot, command}])
+
+        active = true
+        next(acceptors, replicas, ballot, proposals, active)
 
       {:adopted, other_ballot, _} ->
         IO.puts("#{inspect(self())} - ERROR: Received unexpected ballot #{inspect(other_ballot)}")

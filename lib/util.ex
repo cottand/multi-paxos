@@ -92,10 +92,48 @@ defmodule Util do
       this_num > other_num
     else
       # Is this case reachable? I think so
-      IO.puts("WARN Got identical ballot numbers from #{inspect {this_pid, other_pid}}")
+      IO.puts("WARN Got identical ballot numbers from #{inspect({this_pid, other_pid})}")
       exit(:crash)
       :TODO
     end
+  end
+
+  @type proposal_set :: map()
+
+  # {ballot, slot, command}
+  @type pvalues :: MapSet.t({integer(), integer(), any()})
+
+  # { slot, command }
+  @type proposal :: {integer(), any()}
+
+  @spec add_proposal(proposal_set(), proposal()) :: proposal_set()
+  def add_proposal(proposal_set, {slot, command}) do
+    Map.put(proposal_set, slot, command)
+  end
+
+  @spec update_with(proposal_set(), proposal_set()) :: proposal_set()
+  def update_with(xs, ys) do
+    elems_of_xs_not_in_ys =
+      Map.new(Enum.filter(xs, fn {x_key, _} -> !Map.has_key?(ys, x_key) end))
+
+    Map.merge(ys, elems_of_xs_not_in_ys)
+  end
+
+  # I really hope this one works ;-;
+  @spec pmax(pvalues()) :: proposal_set()
+  def pmax(pvalues) do
+    # map of s => [{b, c}]
+    by_proposal = Enum.group_by(pvalues, fn {_b, s, _c} -> s end, fn {b, _s, c} -> {b, c} end)
+    not_reached = fn -> raise "not reached" end
+
+    slot_with_highest_ballot = fn {slot, ballots} ->
+      {slot, Enum.max_by(ballots, fn {b, _} -> b end, not_reached)}
+    end
+
+    # list [{s, {b, c}}]
+    max = Enum.map(by_proposal, slot_with_highest_ballot)
+    # map of {s, c} (ie, a proposal_set)
+    Map.new(Enum.map(max, fn {s, {_b, c}} -> {s, c} end))
   end
 end
 

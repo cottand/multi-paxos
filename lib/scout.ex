@@ -5,8 +5,11 @@ defmodule Scout do
     next(leader, acceptors, acceptors, ballot, MapSet.new())
   end
 
+  # pvalues :: MapSet.t({ballot, slot, command})
+  @spec next(MapSet.t(pid), MapSet.t(pid), MapSet.t(pid), any(), Util.pvalues()) :: any()
   defp next(leader, acceptors, waitfor, ballot, pvalues) do
     receive do
+      # r :: {ballot, slot, command}
       {:p1b, acceptor, new_ballot, r} ->
         if new_ballot == ballot do
           pvalues = MapSet.put(pvalues, r)
