@@ -111,13 +111,17 @@ defmodule Util do
     end
   end
 
+  # { client_id, command_id, operation }
+  # There cannont be two commands with the same client_id and command_id
+  @type command :: {integer(), integer(), any()}
+
   @type proposal_set :: map()
 
-  # {ballot, slot, command}
-  @type pvalues :: MapSet.t({ballot(), integer(), any()})
+  # { ballot, slot, command }
+  @type pvalues :: MapSet.t({ballot(), integer(), command()})
 
   # { slot, command }
-  @type proposal :: {integer(), any()}
+  @type proposal :: {integer(), command()}
 
   @spec add_proposal(proposal_set(), proposal()) :: proposal_set()
   def add_proposal(proposal_set, {slot, command}) do
