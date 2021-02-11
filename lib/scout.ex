@@ -12,6 +12,7 @@ defmodule Scout do
       # r :: {ballot, slot, command}
       {:p1b, acceptor, new_ballot, r} ->
         if new_ballot == ballot do
+          IO.puts("scout: command received is #{inspect r}")
           pvalues = MapSet.put(pvalues, r)
           waitfor = MapSet.delete(waitfor, acceptor)
 

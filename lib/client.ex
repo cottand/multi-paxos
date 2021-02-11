@@ -38,7 +38,7 @@ defp next config, client_num, replicas, sent, quorum do
 
     for r <- 1..quorum do
         replica = Enum.at replicas, rem(sent+r, config.n_servers)
-        send replica, { :CLIENT_REQUEST, cmd }
+        send replica, { :request, cmd }
     end
 
     if sent == config.max_requests, do: send self(), :CLIENT_STOP
@@ -56,4 +56,3 @@ defp receive_replies do
 end # receive_replies
 
 end # Client
-

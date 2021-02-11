@@ -32,6 +32,9 @@ defp start(:cluster_start, config) do
 
   { replicas, acceptors, leaders } = Util.unzip3(server_modules)
 
+  replicas = MapSet.new(replicas)
+  acceptors = MapSet.new(acceptors)
+
   for replica <- replicas, do: send replica, { :BIND, leaders }
   for leader  <- leaders,  do: send leader,  { :BIND, acceptors, replicas }
 
@@ -43,4 +46,3 @@ defp start(:cluster_start, config) do
 end # start
 
 end # Multipaxos
-

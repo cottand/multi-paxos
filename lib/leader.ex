@@ -1,10 +1,13 @@
 defmodule Leader do
-  def start(acceptors, replicas) do
-    ballot = {0, self()}
-    spawn(Scout, :start, [self(), acceptors, ballot])
-    active = false
-    proposals = Map.new()
-    next(acceptors, replicas, ballot, proposals, active)
+  def start(config) do
+    receive do
+      {:BIND, acceptors, replicas} ->
+        ballot = {0, self()}
+        spawn(Scout, :start, [self(), acceptors, ballot])
+        active = false
+        proposals = Map.new()
+        next(acceptors, replicas, ballot, proposals, active)
+    end
   end
 
   defp next(acceptors, replicas, ballot, proposals, active) do
