@@ -9,7 +9,6 @@ def start config do
 end # start
 
 defp next config, balances, db_seqnum do
-  Debug.letter(config, "D")
   receive do
   { :EXECUTE, transaction } ->
     { :MOVE, amount, account1, account2 } = transaction
@@ -28,4 +27,3 @@ defp next config, balances, db_seqnum do
 end # next
 
 end # Database
-

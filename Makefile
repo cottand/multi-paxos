@@ -4,7 +4,7 @@
 
 SERVERS  = 1
 CLIENTS  = 1
-CONFIG   = default
+CONFIG   = debug1
 DEBUG    = 0
 MAX_TIME = 15000
 

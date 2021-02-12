@@ -44,9 +44,11 @@ end
 
 # -----------------------------------------------------------------------------
 
+# Higher debug level means more messages
 def params :debug1 do		# same as :default with debug_level: 1
   config = params :default
- _config = Map.put config, :debug_level, 1
+  IO.inspect("Starting with debug1")
+  Map.put config, :debug_level, 0
 end
 
 def params :debug3 do		# same as :default with debug_level: 3
@@ -57,4 +59,3 @@ end
 # ADD YOUR OWN PARAMETER FUNCTIONS HERE
 
 end # module ----------------------------------------------------------------
-

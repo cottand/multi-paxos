@@ -7,9 +7,9 @@ defmodule Acceptor do
 
   def next(config, ballot, accepted) do
     receive do
-      {:p1a, leader, new_ballot} ->
+      {:p1a, leader_scout, new_ballot} ->
         ballot = if Util.ballot_greater?(new_ballot, ballot), do: new_ballot, else: ballot
-        send(leader, {:p1b, {self(), ballot, accepted}})
+        send(leader_scout, {:p1b, self(), ballot, accepted})
         next(config, ballot, accepted)
 
       {:p2a, leader, {new_ballot, slot, command}} ->
@@ -18,7 +18,6 @@ defmodule Acceptor do
             do: MapSet.put(accepted, {ballot, slot, command}),
             else: accepted
 
-            IO.puts("(acceptor): sending ballot #{inspect ballot}")
         send(leader, {:p2b, self(), ballot})
         next(config, ballot, accepted)
     end

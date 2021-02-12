@@ -24,7 +24,7 @@ defmodule Replica do
           :leaders => leaders
         }
 
-        next(replica_state)
+        next(replica_state, config)
     end
   end
 
@@ -52,7 +52,7 @@ defmodule Replica do
     end
   end
 
-  defp perform(state, command) do
+  defp perform(state, command, config) do
     {client, command_id, op} = command
 
     state =
@@ -62,7 +62,7 @@ defmodule Replica do
         # Execute op
         send(state.database, {:EXECUTE, op})
         # Answer client
-        send(client, {:response, command_id, "lol"})
+        send(client, {:CLIENT_REPLY, command_id, "lol"})
 
         %{state | slot_out: state.slot_out + 1}
       end
@@ -70,17 +70,18 @@ defmodule Replica do
     state
   end
 
-  # @spec next(replica_state()) :
-  defp next(state) do
+  @spec next(replica_state(), map) :: no_return()
+  defp next(state, config) do
     state =
       receive do
+        # received from client
         {:request, command} ->
+          send(config.monitor, {:CLIENT_REQUEST, config.node_num})
           %{state | requests: MapSet.put(state.requests, command)}
 
         {:decision, slot, command} ->
-          # state = %{state | decisions: MapSet.put(state.decisions, {slot, command})}
           decisions = MapSet.put(state.decisions, {slot, command})
-          next_helper(%{state | decisions: decisions})
+          next_helper(%{state | decisions: decisions}, config)
 
         other ->
           IO.puts("#{inspect(self())} (replica): Unexpected command received: #{inspect(other)}")
@@ -88,20 +89,20 @@ defmodule Replica do
       end
 
     state = propose(state)
-    next(state)
+    next(state, config)
   end
 
-  @spec next_helper(replica_state) :: replica_state
-  defp next_helper(state) do
+  @spec next_helper(replica_state, map) :: replica_state
+  defp next_helper(state, config) do
     slot_out = state.slot_out
     proposals = state.proposals
     requests = state.requests
 
-    {decided_cmd, _} =
+    {_, decided_cmd} =
       Enum.find(state.decisions, {nil, nil}, fn {slot_num, _} -> slot_num == slot_out end)
 
     if decided_cmd != nil do
-      # {proposed_cmd, _} = Enum.find(state.proposals, {nil, nil}, fn {slot_num, _} -> slot_num == slot_out end)
+      # we assume there are no such things as reconfiguration commands
       {proposals, requests} =
         if Map.has_key?(proposals, slot_out) do
           proposed_cmd = Map.get(proposals, slot_out)
@@ -115,8 +116,8 @@ defmodule Replica do
           {proposals, requests}
         end
 
-      state = perform(%{state | proposals: proposals, requests: requests}, decided_cmd)
-      next_helper(state)
+      state = perform(%{state | proposals: proposals, requests: requests}, decided_cmd, config)
+      next_helper(state, config)
     else
       state
     end

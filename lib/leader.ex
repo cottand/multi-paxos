@@ -3,14 +3,14 @@ defmodule Leader do
     receive do
       {:BIND, acceptors, replicas} ->
         ballot = {0, self()}
-        spawn(Scout, :start, [self(), acceptors, ballot])
+        spawn(Scout, :start, [self(), acceptors, ballot, config])
         active = false
         proposals = Map.new()
-        next(acceptors, replicas, ballot, proposals, active)
+        next(acceptors, replicas, ballot, proposals, active, config)
     end
   end
 
-  defp next(acceptors, replicas, ballot, proposals, active) do
+  defp next(acceptors, replicas, ballot, proposals, active, config) do
     receive do
       {:propose, slot, command} ->
         new_proposal = !Map.has_key?(proposals, slot)
@@ -18,37 +18,53 @@ defmodule Leader do
 
         if new_proposal do
           if active,
-            do: spawn(Commander, :start, [self(), acceptors, replicas, {ballot, slot, command}])
+            do:
+              spawn(Commander, :start, [
+                self(),
+                acceptors,
+                replicas,
+                {ballot, slot, command},
+                config
+              ])
         end
 
-        next(acceptors, replicas, ballot, proposals, active)
+        next(acceptors, replicas, ballot, proposals, active, config)
 
       # pvals :: MapSet.t({ballot, slot, command})
       {:adopted, ^ballot, pvals} ->
-        proposals = Util.update_with(proposals, Util.pmax(pvals))
+        proposals = Util.update_with(proposals, Util.pmax(pvals, config))
 
         for {slot, command} <- proposals,
-            do: spawn(Commander, :start, [self(), acceptors, replicas, {ballot, slot, command}])
+            do:
+              spawn(Commander, :start, [
+                self(),
+                acceptors,
+                replicas,
+                {ballot, slot, command},
+                config
+              ])
 
         active = true
-        next(acceptors, replicas, ballot, proposals, active)
+        next(acceptors, replicas, ballot, proposals, active, config)
 
       {:adopted, other_ballot, _} ->
-        IO.puts("#{inspect(self())} - ERROR: Received unexpected ballot #{inspect(other_ballot)}")
-        exit(:crash)
+        Util.halt("#{inspect(self())} - ERROR: Received unexpected ballot #{inspect(other_ballot)}")
 
       {:preempted, {other_ballot_num, other_leader}} ->
         {active, ballot} =
           if Util.ballot_greater?({other_ballot_num, other_leader}, ballot) do
             new_ballot = {other_ballot_num + 1, self()}
-            spawn(Scout, :start, [self(), acceptors, new_ballot])
+            spawn(Scout, :start, [self(), acceptors, new_ballot, config])
 
             {false, new_ballot}
           else
             {active, ballot}
           end
 
-        next(acceptors, replicas, ballot, proposals, active)
+        next(acceptors, replicas, ballot, proposals, active, config)
+
+      unexpected ->
+        Util.halt "Leader received unexpected #{inspect unexpected}"
     end
   end
 end

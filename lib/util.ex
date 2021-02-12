@@ -79,6 +79,21 @@ defmodule Util do
     config
   end
 
+  def debug_level_from(atom_or_int) do
+    case(atom_or_int) do
+      :DEBUG -> 0
+      :INFO -> 1
+      :WARN -> 2
+      :LIFE -> 3
+      other -> other
+    end
+  end
+
+  def log(config, level, message) do
+    level = debug_level_from(level)
+    if level >= config.debug_level, do: IO.puts(message)
+  end
+
   # node_init
 
   @type ballot :: {integer(), pid()} | :bottom
@@ -89,9 +104,10 @@ defmodule Util do
   # hash deterministically
   @spec ballot_as_num(ballot()) :: float()
   def ballot_as_num(:bottom), do: -1000.0
+
   def ballot_as_num({num, pid}) do
     pid = Enum.reduce(inspect(pid), fn char, acc -> char * 31 * acc end)
-    num * 1000.0 + (10.0 / pid )
+    num * 1000.0 + 10.0 / pid
   end
 
   # Whether this ballot is greater than the other, in lexicographic order
@@ -105,15 +121,14 @@ defmodule Util do
       this_num > other_num
     else
       # Is this case reachable? I think so
-      IO.puts("WARN Got identical ballot numbers from #{inspect({this_pid, other_pid})}")
-      exit(:crash)
+      halt("WARN Got identical ballot numbers from #{inspect({this_pid, other_pid})}")
       :TODO
     end
   end
 
   # { client_id, command_id, operation }
   # There cannont be two commands with the same client_id and command_id
-  @type command :: {integer(), integer(), any()}
+  @type command :: {pid, integer, any}
 
   @type proposal_set :: map()
 
@@ -137,9 +152,10 @@ defmodule Util do
   end
 
   # I really hope this one works ;-;
-  @spec pmax(pvalues()) :: proposal_set()
-  def pmax(pvalues) do
+  @spec pmax(pvalues(), map) :: proposal_set()
+  def pmax(pvalues, config) do
     # map of s => [{b, c}]
+    log config, :DEBUG, "calculating pmax of #{inspect pvalues}"
     by_proposal = Enum.group_by(pvalues, fn {_b, s, _c} -> s end, fn {b, _s, c} -> {b, c} end)
     not_reached = fn -> raise "not reached" end
 
