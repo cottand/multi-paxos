@@ -5,6 +5,7 @@ defmodule Leader do
         ballot = {0, self()}
         spawn(Scout, :start, [self(), acceptors, ballot, config])
         active = false
+        send(config.monitor, {:LEADER_ACTIVE, active, config.node_num})
         proposals = Map.new()
         next(acceptors, replicas, ballot, proposals, active, config)
     end
@@ -45,10 +46,13 @@ defmodule Leader do
               ])
 
         active = true
+        send(config.monitor, {:LEADER_ACTIVE, active, config.node_num})
         next(acceptors, replicas, ballot, proposals, active, config)
 
       {:adopted, other_ballot, _} ->
-        Util.halt("#{inspect(self())} - ERROR: Received unexpected ballot #{inspect(other_ballot)}")
+        Util.halt(
+          "#{inspect(self())} - ERROR: Received unexpected ballot #{inspect(other_ballot)}"
+        )
 
       {:preempted, {other_ballot_num, other_leader}} ->
         {active, ballot} =
@@ -61,10 +65,11 @@ defmodule Leader do
             {active, ballot}
           end
 
+        send(config.monitor, {:LEADER_ACTIVE, active, config.node_num})
         next(acceptors, replicas, ballot, proposals, active, config)
 
       unexpected ->
-        Util.halt "Leader received unexpected #{inspect unexpected}"
+        Util.halt("Leader received unexpected #{inspect(unexpected)}")
     end
   end
 end

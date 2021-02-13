@@ -35,7 +35,8 @@ defmodule Monitor do
       scouts_spawned: Map.new(),
       scouts_finished: Map.new(),
       commanders_spawned: Map.new(),
-      commanders_finished: Map.new()
+      commanders_finished: Map.new(),
+      active_leaders: Map.new()
     }
 
     Monitor.start_print_timeout(config.print_after)
@@ -103,6 +104,11 @@ defmodule Monitor do
         state = Monitor.commanders_finished(state, server_num, value + 1)
         Monitor.next(config, state)
 
+      {:LEADER_ACTIVE, active?, server_num} ->
+          active = Map.put(state.active_leaders, server_num, active?)
+          state = Map.put(state, :active_leaders, active )
+          Monitor.next(config, state)
+
       {:PRINT} ->
         clock = state.clock + config.print_after
         state = Monitor.clock(state, clock)
@@ -131,6 +137,8 @@ defmodule Monitor do
           IO.puts("time = #{clock}        commanders up = #{inspect(sorted)}")
           sorted = state.commanders_finished |> Map.to_list() |> List.keysort(0)
           IO.puts("time = #{clock}      commanders down = #{inspect(sorted)}")
+          sorted = state.active_leaders |> Map.to_list() |> List.keysort(0)
+          IO.puts("time = #{clock}       active leaders = #{inspect(sorted)}")
         end
 
         IO.puts("")

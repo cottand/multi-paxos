@@ -91,7 +91,7 @@ defmodule Util do
 
   def log(config, level, message) do
     level = debug_level_from(level)
-    if level >= config.debug_level, do: IO.puts(message)
+    if level >= config.debug_level, do: IO.puts("#{node_string()}: #{message}")
   end
 
   # node_init
