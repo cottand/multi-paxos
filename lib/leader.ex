@@ -2,7 +2,7 @@ defmodule Leader do
   def start(config) do
     receive do
       {:BIND, acceptors, replicas} ->
-        ballot = {0, self()}
+        ballot = {0, config.node_num, self()}
         spawn(Scout, :start, [self(), acceptors, ballot, config])
         active = false
         send(config.monitor, {:LEADER_ACTIVE, active, config.node_num})
@@ -57,15 +57,17 @@ defmodule Leader do
           "#{inspect(self())} - ERROR: Received unexpected ballot #{inspect(other_ballot)}"
         )
 
-      {:preempted, {other_ballot_num, other_leader}} ->
+      {:preempted, other_ballot} ->
+        {other_ballot_num, _other_leader_node_num, _other_leader} = other_ballot
+        Util.log(config, :DEBUG, "leader: with #{inspect ballot} preempted with #{inspect other_ballot}")
         {active, ballot} =
-          if Util.ballot_greater?({other_ballot_num, other_leader}, ballot) do
+          if Util.ballot_greater?(other_ballot, ballot) do
             Util.log config, :WARN, "Preempted by #{inspect {active, ballot}}"
             # TODO: this here means leader got preempted - spawning a new scout and just increasing
             # ballot numper will lead to a livelock between 2 leaders (they each keep increasing the ballot number)
             # so we have to do something to ensure _liveness_ - paper suggests just pinging the
             # other leader but I am not sure how that helps.
-            new_ballot = {other_ballot_num + 1, self()}
+            new_ballot = {other_ballot_num + 1, config.node_num, self()}
             spawn(Scout, :start, [self(), acceptors, new_ballot, config])
 
             {false, new_ballot}

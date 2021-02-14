@@ -91,12 +91,14 @@ defmodule Util do
 
   def log(config, level, message) do
     level = debug_level_from(level)
-    if level >= config.debug_level, do: IO.puts("#{node()}: #{message}")
+
+    if level >= config.debug_level,
+      do: IO.puts("##{config.node_num}@#{inspect(self())}: #{message}")
   end
 
   # node_init
-  # {p_number, pid}
-  @type ballot :: {integer(), pid()} | :bottom
+  # {p_number, server_num, pid}
+  @type ballot :: {integer(), integer(), pid()} | :bottom
 
   # returns a deterministic float for a ballot, where a ballot with a higher integer
   # is always bigger than a ballot with a smaller integer independently of PID,
@@ -105,26 +107,23 @@ defmodule Util do
   @spec ballot_as_num(ballot()) :: float()
   def ballot_as_num(:bottom), do: -1000.0
 
-  def ballot_as_num({num, pid}) do
-    pid = to_charlist(inspect(pid))
-    pid = Enum.reduce(pid, fn char, acc -> char * 31 + acc end)
-    num * 100.0 + (100.0 / pid)
-  end
+  def ballot_as_num({num, server_num, _}), do: num * 100.0 + 100.0 / server_num
 
   # Whether this ballot is greater than the other, in lexicographic order
   @spec ballot_greater?(ballot(), ballot()) :: boolean
-  def ballot_greater?(:bottom, _), do: false
+  def ballot_greater?(b1, b2), do: ballot_as_num(b1) > ballot_as_num(b2)
+  # def ballot_greater?(:bottom, _), do: false
 
-  def ballot_greater?(_, :bottom), do: true
+  # def ballot_greater?(_, :bottom), do: true
 
-  def ballot_greater?({this_num, this_pid}, {other_num, other_pid}) do
-    if this_num != other_num do
-      this_num > other_num
-    else
-      # numbers are equal! compare hashes from PIDs
-      ballot_as_num({this_num, this_pid}) > ballot_as_num({other_num, other_pid})
-    end
-  end
+  # def ballot_greater?({this_num, this_pid}, {other_num, other_pid}) do
+  #   if this_num != other_num do
+  #     this_num > other_num
+  #   else
+  #     # numbers are equal! compare hashes from PIDs
+  #     ballot_as_num({this_num, this_pid}) > ballot_as_num({other_num, other_pid})
+  #   end
+  # end
 
   # { client_id, command_id, operation }
   # There cannont be two commands with the same client_id and command_id
@@ -155,7 +154,7 @@ defmodule Util do
   @spec pmax(pvalues(), map) :: proposal_set()
   def pmax(pvalues, config) do
     # map of s => [{b, c}]
-    log config, :DEBUG, "calculating pmax of #{inspect pvalues}"
+    log(config, :DEBUG, "calculating pmax of #{inspect(pvalues)}")
     by_proposal = Enum.group_by(pvalues, fn {_b, s, _c} -> s end, fn {b, _s, c} -> {b, c} end)
     not_reached = fn -> raise "not reached" end
 

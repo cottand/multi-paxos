@@ -62,6 +62,14 @@ defmodule Configuration do
       client_sleep: 500
     })
   end
+  # Less chatty, with more requests
+  def params(:debug2) do
+    Map.merge(params(:default), %{
+      debug_level: 1,
+      max_requests: 4,
+      client_sleep: 500
+    })
+  end
 
   # same as :default with debug_level: 3
   def params(:debug3) do

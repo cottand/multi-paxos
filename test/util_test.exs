@@ -40,11 +40,15 @@ defmodule UtilTest do
     assert ballot_as_num(b2) != ballot_as_num(b1)
   end
 
+  defp comapre_numerical(b1, b2), do: ballot_as_num(b1) > ballot_as_num(b2)
+
   test "ballots from diff PID with same number can be compared consistently" do
     pid1 = spawn(fn -> nil end)
     pid2 = spawn(fn -> nil end)
-    b1 = ballot_as_num {1, pid1}
-    b2 = ballot_as_num {1, pid2}
+    assert comapre_numerical({0, pid1},{0, pid2}) == ballot_greater?({0, pid1},{0, pid2})
+    assert comapre_numerical({0, pid2},{0, pid1}) == ballot_greater?({0, pid2},{0, pid1})
+    b1 = ballot_as_num {0, pid1}
+    b2 = ballot_as_num {0, pid2}
     greater = b1 > b2
     if greater do
       assert not (b2 > b1)
@@ -52,7 +56,4 @@ defmodule UtilTest do
       assert b2 >= b1
     end
   end
-
-
-
 end
