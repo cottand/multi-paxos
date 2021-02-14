@@ -35,6 +35,7 @@ defmodule Leader do
 
       # pvals :: MapSet.t({ballot, slot, command})
       {:adopted, ^ballot, pvals} ->
+        Util.log config, :DEBUG, "active: #{active}, received ADOPTED"
         proposals = Util.update_with(proposals, Util.pmax(pvals, config))
 
         for {slot, command} <- proposals,

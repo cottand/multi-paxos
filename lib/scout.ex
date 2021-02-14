@@ -6,6 +6,7 @@ defmodule Scout do
         }) :: no_return
   def start(leader, acceptors, ballot, config) do
     send config.monitor, {:SCOUT_SPAWNED, config.node_num}
+    Util.log config,:DEBUG, "acceptors are #{inspect acceptors}"
     for acceptor <- acceptors, do: send(acceptor, {:p1a, self(), ballot})
 
     next(leader, acceptors, acceptors, ballot, MapSet.new(), config)
@@ -18,7 +19,7 @@ defmodule Scout do
       # r :: {ballot, slot, command}
       {:p1b, acceptor, new_ballot, r} ->
         if new_ballot == ballot do
-          Util.log(config, :DEBUG, "scout: commands received are #{inspect r}")
+          Util.log(config, :DEBUG, "scout: commands received are #{inspect r}, updating pvalues #{inspect pvalues}")
           pvalues = MapSet.union(pvalues, r)
           waitfor = MapSet.delete(waitfor, acceptor)
 
