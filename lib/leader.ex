@@ -16,7 +16,7 @@ defmodule Leader do
       {:propose, slot, command} ->
         new_proposal = not Map.has_key?(proposals, slot)
         age = if new_proposal, do: "new", else: "old"
-        Util.log config, :DEBUG, "received #{age} proposal for slot #{slot}"
+        Util.log config, :DEBUG, "active: #{active}, received #{age} proposal for slot #{slot}"
         proposals = if new_proposal, do: Map.put(proposals, slot, command), else: proposals
 
         if new_proposal do
