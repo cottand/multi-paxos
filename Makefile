@@ -28,15 +28,15 @@ MIX 	:= -S mix run -e ${START} \
 run cluster: compile
 	@ ${ELIXIR} server1_${NODE_SUFFIX} ${MIX} cluster_wait &
 	@ ${ELIXIR} server2_${NODE_SUFFIX} ${MIX} cluster_wait &
-	# @ ${ELIXIR} server3_${NODE_SUFFIX} ${MIX} cluster_wait &
-	# @ ${ELIXIR} server4_${NODE_SUFFIX} ${MIX} cluster_wait &
-	# @ ${ELIXIR} server5_${NODE_SUFFIX} ${MIX} cluster_wait &
+	@ ${ELIXIR} server3_${NODE_SUFFIX} ${MIX} cluster_wait &
+	@ ${ELIXIR} server4_${NODE_SUFFIX} ${MIX} cluster_wait &
+	@ ${ELIXIR} server5_${NODE_SUFFIX} ${MIX} cluster_wait &
 
 	@ ${ELIXIR} client1_${NODE_SUFFIX} ${MIX} cluster_wait &
 	@ ${ELIXIR} client2_${NODE_SUFFIX} ${MIX} cluster_wait &
-	# @ ${ELIXIR} client3_${NODE_SUFFIX} ${MIX} cluster_wait &
-	# @ ${ELIXIR} client4_${NODE_SUFFIX} ${MIX} cluster_wait &
-	# @ ${ELIXIR} client5_${NODE_SUFFIX} ${MIX} cluster_wait &
+	@ ${ELIXIR} client3_${NODE_SUFFIX} ${MIX} cluster_wait &
+	@ ${ELIXIR} client4_${NODE_SUFFIX} ${MIX} cluster_wait &
+	@ ${ELIXIR} client5_${NODE_SUFFIX} ${MIX} cluster_wait &
 	@sleep 3
 	@ ${ELIXIR} multipaxos_${NODE_SUFFIX} ${MIX} cluster_start
 

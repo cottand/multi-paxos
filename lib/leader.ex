@@ -14,7 +14,9 @@ defmodule Leader do
   defp next(acceptors, replicas, ballot, proposals, active, config) do
     receive do
       {:propose, slot, command} ->
-        new_proposal = !Map.has_key?(proposals, slot)
+        new_proposal = not Map.has_key?(proposals, slot)
+        age = if new_proposal, do: "new", else: "old"
+        Util.log config, :DEBUG, "received #{age} proposal for slot #{slot}"
         proposals = if new_proposal, do: Map.put(proposals, slot, command), else: proposals
 
         if new_proposal do
@@ -57,6 +59,11 @@ defmodule Leader do
       {:preempted, {other_ballot_num, other_leader}} ->
         {active, ballot} =
           if Util.ballot_greater?({other_ballot_num, other_leader}, ballot) do
+            Util.log config, :WARN, "Preempted by #{inspect {active, ballot}}"
+            # TODO: this here means leader got preempted - spawning a new scout and just increasing
+            # ballot numper will lead to a livelock between 2 leaders (they each keep increasing the ballot number)
+            # so we have to do something to ensure _liveness_ - paper suggests just pinging the
+            # other leader but I am not sure how that helps.
             new_ballot = {other_ballot_num + 1, self()}
             spawn(Scout, :start, [self(), acceptors, new_ballot, config])
 

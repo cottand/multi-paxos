@@ -24,7 +24,7 @@ defp next config, client_num, replicas, sent, quorum do
 
   receive do
   :CLIENT_STOP ->
-    IO.puts "  Client #{client_num} going to sleep, sent = #{sent}"
+    Util.log config, :INFO, "client #{client_num} going to sleep, sent = #{sent}"
     Process.sleep :infinity
 
   after config.client_sleep ->

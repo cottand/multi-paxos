@@ -48,7 +48,11 @@ end
 def params :debug1 do		# same as :default with debug_level: 1
   config = params :default
   IO.inspect("Starting with debug1")
-  Map.put config, :debug_level, 0
+  Map.merge config, %{
+   debug_level: 0,
+   max_requests: 5,
+   client_sleep: 500,
+  }
 end
 
 def params :debug3 do		# same as :default with debug_level: 3

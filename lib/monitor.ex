@@ -104,11 +104,6 @@ defmodule Monitor do
         state = Monitor.commanders_finished(state, server_num, value + 1)
         Monitor.next(config, state)
 
-      {:LEADER_ACTIVE, active?, server_num} ->
-          active = Map.put(state.active_leaders, server_num, active?)
-          state = Map.put(state, :active_leaders, active )
-          Monitor.next(config, state)
-
       {:PRINT} ->
         clock = state.clock + config.print_after
         state = Monitor.clock(state, clock)
@@ -146,6 +141,11 @@ defmodule Monitor do
         Monitor.next(config, state)
 
       # ** ADD ADDITIONAL MONITORING MESSAGES OF YOUR OWN HERE
+
+      {:LEADER_ACTIVE, active?, server_num} ->
+          active = Map.put(state.active_leaders, server_num, active?)
+          state = Map.put(state, :active_leaders, active )
+          Monitor.next(config, state)
 
       unexpected ->
         Util.halt("monitor: unexpected message #{inspect(unexpected)}")

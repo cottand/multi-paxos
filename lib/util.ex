@@ -106,7 +106,8 @@ defmodule Util do
   def ballot_as_num(:bottom), do: -1000.0
 
   def ballot_as_num({num, pid}) do
-    pid = Enum.reduce(inspect(pid), fn char, acc -> char * 31 * acc end)
+    pid = to_charlist(inspect(pid))
+    pid = Enum.reduce(pid, fn char, acc -> char * 31 * acc end)
     num * 1000.0 + 10.0 / pid
   end
 
@@ -120,9 +121,8 @@ defmodule Util do
     if this_num != other_num do
       this_num > other_num
     else
-      # Is this case reachable? I think so
-      halt("WARN Got identical ballot numbers from #{inspect({this_pid, other_pid})}")
-      :TODO
+      # numbers are equal! compare hashes from PIDs
+      ballot_as_num({this_num, this_pid}) > ballot_as_num({other_num, other_pid})
     end
   end
 
