@@ -91,11 +91,11 @@ defmodule Util do
 
   def log(config, level, message) do
     level = debug_level_from(level)
-    if level >= config.debug_level, do: IO.puts("#{node_string()}: #{message}")
+    if level >= config.debug_level, do: IO.puts("#{node()}: #{message}")
   end
 
   # node_init
-
+  # {p_number, pid}
   @type ballot :: {integer(), pid()} | :bottom
 
   # returns a deterministic float for a ballot, where a ballot with a higher integer
@@ -107,8 +107,8 @@ defmodule Util do
 
   def ballot_as_num({num, pid}) do
     pid = to_charlist(inspect(pid))
-    pid = Enum.reduce(pid, fn char, acc -> char * 31 * acc end)
-    num * 1000.0 + 10.0 / pid
+    pid = Enum.reduce(pid, fn char, acc -> char * 31 + acc end)
+    num * 100.0 + (100.0 / pid)
   end
 
   # Whether this ballot is greater than the other, in lexicographic order

@@ -2,7 +2,7 @@
 # distributed algorithms, n.dulay, 29 jan 21 
 # coursework, paxos made moderately complex
 
-SERVERS  = 2
+SERVERS  = 3
 CLIENTS  = 2
 CONFIG   = debug1
 DEBUG    = 0

@@ -9,7 +9,7 @@ defmodule Acceptor do
     receive do
       {:p1a, leader_scout, new_ballot} ->
         is_greater = Util.ballot_greater?(new_ballot, ballot)
-        Util.log config, :DEBUG, "Comparing #{inspect new_ballot} > #{inspect ballot}: #{is_greater}"
+        Util.log config, :DEBUG, "acceptor (p1a): comparing #{inspect new_ballot} > #{inspect ballot}: #{is_greater}"
         ballot = if is_greater, do: new_ballot, else: ballot
         send(leader_scout, {:p1b, self(), ballot, accepted})
         next(config, ballot, accepted)

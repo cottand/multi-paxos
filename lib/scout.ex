@@ -16,14 +16,19 @@ defmodule Scout do
   @spec next(MapSet.t(pid), MapSet.t(pid), MapSet.t(pid), any(), Util.pvalues(), map()) :: any()
   defp next(leader, acceptors, waitfor, ballot, pvalues, config) do
     receive do
-      # r :: {ballot, slot, command}
+      # r :: MapSet.t {ballot, slot, command}
       {:p1b, acceptor, new_ballot, r} ->
         if new_ballot == ballot do
           Util.log(config, :DEBUG, "scout: commands received are #{inspect r}, updating pvalues #{inspect pvalues}")
           pvalues = MapSet.union(pvalues, r)
           waitfor = MapSet.delete(waitfor, acceptor)
 
-          if MapSet.size(waitfor) < MapSet.size(acceptors) / 2 do
+          waiting_still = MapSet.size(waitfor)
+          all_acceptors = MapSet.size(acceptors)
+          Util.log config, :DEBUG, "scout: received p1b from #{all_acceptors - waiting_still}/#{all_acceptors}"
+          # TODO what happens when we have 2 servers only??
+          if waiting_still < all_acceptors / 2 do
+            # FIXME we never reach this - we only ever receive a single :p1b
             send leader, {:adopted, ballot, pvalues}
             stop(config)
           end
