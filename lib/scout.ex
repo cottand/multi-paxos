@@ -18,6 +18,7 @@ defmodule Scout do
     receive do
       # r :: MapSet.t {ballot, slot, command}
       {:p1b, acceptor, new_ballot, r} ->
+        Util.log config, :DEBUG, "socut: receievd p1b for ballot #{inspect new_ballot}, having #{ballot}"
         if new_ballot == ballot do
           Util.log(config, :DEBUG, "scout: commands received are #{inspect r}, updating pvalues #{inspect pvalues}")
           pvalues = MapSet.union(pvalues, r)
