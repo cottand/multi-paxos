@@ -170,16 +170,3 @@ defmodule Util do
 end
 
 # Util
-
-"""
-defp read_network_map(file_name) do
-  # line = <node_num> <hostname> pair
-  # returns Map of node_num to hostname entries
-
-  stream = File.stream!(file_name) |> Stream.map(&String.split/1)
-
-  for [first, second | _] <- stream, into: %{} do
-    { (first |> String.to_integer), second }
-  end
-end # read_network_map
-"""
