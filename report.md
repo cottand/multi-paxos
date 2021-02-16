@@ -18,7 +18,7 @@ To store proposals, we use `Map`s for efficient $O(1)$ membership check operatio
 
 TODO
 
-## Debugging and Testing Methodology (~1/2 pages)
+## Debugging and Testing Methodology (~0.5 pages)
 
 We extended `Monitor` by adding a _active leaders_ field. Particularly useful in testing liveliness, and determining when a slow system is 'stuck'.
 

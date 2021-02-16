@@ -113,7 +113,6 @@ defmodule Monitor do
         sorted = state.requests |> Map.to_list() |> List.keysort(0)
         IO.puts("time = #{clock} client requests seen = #{inspect(sorted)}")
 
-        if config.debug_level == 0 do
           min_done = state.updates |> Map.values() |> Enum.min(fn -> 0 end)
           n_requests = state.requests |> Map.values() |> Enum.sum()
 
@@ -124,7 +123,7 @@ defmodule Monitor do
           )
 
           sorted = state.scouts_spawned |> Map.to_list() |> List.keysort(0)
-          IO.puts("time = #{clock}            scouts up = #{inspect(sorted)}")
+          IO.puts("time = #{clock}       scouts spawned = #{inspect(sorted)}")
           sorted = state.scouts_finished |> Map.to_list() |> List.keysort(0)
           IO.puts("time = #{clock}          scouts down = #{inspect(sorted)}")
 
@@ -134,7 +133,6 @@ defmodule Monitor do
           IO.puts("time = #{clock}      commanders down = #{inspect(sorted)}")
           sorted = state.active_leaders |> Map.to_list() |> List.keysort(0)
           IO.puts("time = #{clock}       active leaders = #{inspect(sorted)}")
-        end
 
         IO.puts("")
         Monitor.start_print_timeout(config.print_after)

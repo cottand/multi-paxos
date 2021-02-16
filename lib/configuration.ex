@@ -73,8 +73,11 @@ defmodule Configuration do
 
   # same as :default with debug_level: 3
   def params(:debug3) do
-    config = params(:default)
-    _config = Map.put(config, :debug_level, 3)
+    Map.merge(params(:default), %{
+      debug_level: 1,
+      max_requests: 5,
+      client_sleep: 50
+    })
   end
 
   # ADD YOUR OWN PARAMETER FUNCTIONS HERE
