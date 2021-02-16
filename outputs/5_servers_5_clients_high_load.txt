@@ -1,219 +1,186 @@
 mix compile
 Compiling 1 file (.ex)
---> Starting Multipaxos at multipaxos_05_williamprofit@127.0.0.1 (192.168.0.24)
+--> Starting Multipaxos at multipaxos_57_williamprofit@127.0.0.1 (192.168.0.24)
   client_send :broadcast
-  client_sleep 0.5
+  client_sleep 10
   client_stop 60000
   crash_server %{}
   debug_level 1
   max_amount 1000
-  max_requests 200
+  max_requests 30
   max_time 15000
   monitor #PID<0.183.0>
-  n_accounts 1000
+  n_accounts 100
   n_clients 5
   n_servers 5
-  node_location "multipaxos_05_williamprofit@127.0.0.1 (192.168.0.24)"
+  node_location "multipaxos_57_williamprofit@127.0.0.1 (192.168.0.24)"
   node_name "Multipaxos"
   node_num ""
-  node_suffix "05_williamprofit@127.0.0.1"
+  node_suffix "57_williamprofit@127.0.0.1"
   node_type "Multipaxos"
   prevent_livelock false
   print_after 1000
   start_function :cluster_start
---> Starting Server1 at server1_05_williamprofit@127.0.0.1 (192.168.0.24)
---> Starting Server2 at server2_05_williamprofit@127.0.0.1 (192.168.0.24)
---> Starting Server3 at server3_05_williamprofit@127.0.0.1 (192.168.0.24)
---> Starting Server4 at server4_05_williamprofit@127.0.0.1 (192.168.0.24)
---> Starting Server5 at server5_05_williamprofit@127.0.0.1 (192.168.0.24)
---> Starting Client1 at client1_05_williamprofit@127.0.0.1 (192.168.0.24)
---> Starting Client2 at client2_05_williamprofit@127.0.0.1 (192.168.0.24)
---> Starting Client3 at client3_05_williamprofit@127.0.0.1 (192.168.0.24)
-
-14:45:09.520 [error] Process #PID<18544.186.0> on node :"client1_05_williamprofit@127.0.0.1" raised an exception
-** (ErlangError) Erlang error: :timeout_value
-    (multipaxos 0.1.0) lib/client.ex:29: Client.next/5
-
-14:45:09.528 [error] Process #PID<18545.186.0> on node :"client2_05_williamprofit@127.0.0.1" raised an exception
-** (ErlangError) Erlang error: :timeout_value
-    (multipaxos 0.1.0) lib/client.ex:29: Client.next/5
-
-14:45:09.537 [error] Process #PID<18581.186.0> on node :"client3_05_williamprofit@127.0.0.1" raised an exception
-** (ErlangError) Erlang error: :timeout_value
-    (multipaxos 0.1.0) lib/client.ex:29: Client.next/5
---> Starting Client4 at client4_05_williamprofit@127.0.0.1 (192.168.0.24)
-
-14:45:09.542 [error] Process #PID<18607.186.0> on node :"client4_05_williamprofit@127.0.0.1" raised an exception
-** (ErlangError) Erlang error: :timeout_value
-    (multipaxos 0.1.0) lib/client.ex:29: Client.next/5
-
-14:45:09.520 [error] Process #PID<0.186.0> on node :"client1_05_williamprofit@127.0.0.1" raised an exception
-** (ErlangError) Erlang error: :timeout_value
-    (multipaxos 0.1.0) lib/client.ex:29: Client.next/5
---> Starting Client5 at client5_05_williamprofit@127.0.0.1 (192.168.0.24)
-
-14:45:09.547 [error] Process #PID<18662.186.0> on node :"client5_05_williamprofit@127.0.0.1" raised an exception
-** (ErlangError) Erlang error: :timeout_value
-    (multipaxos 0.1.0) lib/client.ex:29: Client.next/5
-
-14:45:09.528 [error] Process #PID<0.186.0> on node :"client2_05_williamprofit@127.0.0.1" raised an exception
-** (ErlangError) Erlang error: :timeout_value
-    (multipaxos 0.1.0) lib/client.ex:29: Client.next/5
-
-14:45:09.537 [error] Process #PID<0.186.0> on node :"client3_05_williamprofit@127.0.0.1" raised an exception
-** (ErlangError) Erlang error: :timeout_value
-    (multipaxos 0.1.0) lib/client.ex:29: Client.next/5
-
-14:45:09.542 [error] Process #PID<0.186.0> on node :"client4_05_williamprofit@127.0.0.1" raised an exception
-** (ErlangError) Erlang error: :timeout_value
-    (multipaxos 0.1.0) lib/client.ex:29: Client.next/5
-
-14:45:09.547 [error] Process #PID<0.186.0> on node :"client5_05_williamprofit@127.0.0.1" raised an exception
-** (ErlangError) Erlang error: :timeout_value
-    (multipaxos 0.1.0) lib/client.ex:29: Client.next/5
+--> Starting Server1 at server1_57_williamprofit@127.0.0.1 (192.168.0.24)
+--> Starting Server2 at server2_57_williamprofit@127.0.0.1 (192.168.0.24)
+--> Starting Server3 at server3_57_williamprofit@127.0.0.1 (192.168.0.24)
+--> Starting Server4 at server4_57_williamprofit@127.0.0.1 (192.168.0.24)
+--> Starting Server5 at server5_57_williamprofit@127.0.0.1 (192.168.0.24)
+--> Starting Client1 at client1_57_williamprofit@127.0.0.1 (192.168.0.24)
+--> Starting Client2 at client2_57_williamprofit@127.0.0.1 (192.168.0.24)
+--> Starting Client3 at client3_57_williamprofit@127.0.0.1 (192.168.0.24)
+--> Starting Client4 at client4_57_williamprofit@127.0.0.1 (192.168.0.24)
+--> Starting Client5 at client5_57_williamprofit@127.0.0.1 (192.168.0.24)
+#1@#PID<0.186.0>: client 1 going to sleep, sent = 30
+#2@#PID<0.186.0>: client 2 going to sleep, sent = 30
+#3@#PID<0.186.0>: client 3 going to sleep, sent = 30
+#5@#PID<0.186.0>: client 5 going to sleep, sent = 30
+#4@#PID<0.186.0>: client 4 going to sleep, sent = 30
 time = 1000      db updates done = []
-time = 1000 client requests seen = []
-time = 1000           total seen = 0 max lag = 0
-time = 1000       scouts spawned = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 1000          scouts down = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 1000        commanders up = []
-time = 1000      commanders down = []
-time = 1000       active leaders = [{1, true}, {2, true}, {3, true}, {4, true}, {5, true}]
+time = 1000 client requests seen = [{1, 150}, {2, 150}, {3, 150}, {4, 150}, {5, 150}]
+time = 1000           total seen = 750 max lag = 750
+time = 1000       scouts spawned = [{1, 338}, {2, 385}, {3, 431}, {4, 565}, {5, 679}]
+time = 1000          scouts down = [{1, 338}, {2, 385}, {3, 430}, {4, 565}, {5, 679}]
+time = 1000        commanders up = [{1, 2940}, {2, 2875}, {3, 2669}, {4, 2500}, {5, 2128}]
+time = 1000      commanders down = [{1, 2933}, {2, 2875}, {3, 2669}, {4, 2500}, {5, 2128}]
+time = 1000       active leaders = [{1, true}, {2, false}, {3, false}, {4, false}, {5, false}]
 
-time = 2000      db updates done = []
-time = 2000 client requests seen = []
-time = 2000           total seen = 0 max lag = 0
-time = 2000       scouts spawned = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 2000          scouts down = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 2000        commanders up = []
-time = 2000      commanders down = []
-time = 2000       active leaders = [{1, true}, {2, true}, {3, true}, {4, true}, {5, true}]
+time = 2000      db updates done = [{1, 4}, {2, 4}, {3, 4}, {4, 4}, {5, 4}]
+time = 2000 client requests seen = [{1, 150}, {2, 150}, {3, 150}, {4, 150}, {5, 150}]
+time = 2000           total seen = 750 max lag = 746
+time = 2000       scouts spawned = [{1, 715}, {2, 782}, {3, 885}, {4, 1153}, {5, 1414}]
+time = 2000          scouts down = [{1, 715}, {2, 782}, {3, 885}, {4, 1153}, {5, 1413}]
+time = 2000        commanders up = [{1, 6616}, {2, 6471}, {3, 6081}, {4, 5672}, {5, 4912}]
+time = 2000      commanders down = [{1, 6611}, {2, 6471}, {3, 6081}, {4, 5672}, {5, 4912}]
+time = 2000       active leaders = [{1, false}, {2, false}, {3, false}, {4, false}, {5, false}]
 
-time = 3000      db updates done = []
-time = 3000 client requests seen = []
-time = 3000           total seen = 0 max lag = 0
-time = 3000       scouts spawned = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 3000          scouts down = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 3000        commanders up = []
-time = 3000      commanders down = []
-time = 3000       active leaders = [{1, true}, {2, true}, {3, true}, {4, true}, {5, true}]
+time = 3000      db updates done = [{1, 4}, {2, 4}, {3, 4}, {4, 4}, {5, 4}]
+time = 3000 client requests seen = [{1, 150}, {2, 150}, {3, 150}, {4, 150}, {5, 150}]
+time = 3000           total seen = 750 max lag = 746
+time = 3000       scouts spawned = [{1, 1041}, {2, 1154}, {3, 1303}, {4, 1702}, {5, 2074}]
+time = 3000          scouts down = [{1, 1040}, {2, 1154}, {3, 1303}, {4, 1702}, {5, 2074}]
+time = 3000        commanders up = [{1, 10704}, {2, 10374}, {3, 9791}, {4, 8810}, {5, 7768}]
+time = 3000      commanders down = [{1, 10704}, {2, 10366}, {3, 9791}, {4, 8808}, {5, 7768}]
+time = 3000       active leaders = [{1, false}, {2, true}, {3, false}, {4, true}, {5, false}]
 
-time = 4000      db updates done = []
-time = 4000 client requests seen = []
-time = 4000           total seen = 0 max lag = 0
-time = 4000       scouts spawned = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 4000          scouts down = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 4000        commanders up = []
-time = 4000      commanders down = []
-time = 4000       active leaders = [{1, true}, {2, true}, {3, true}, {4, true}, {5, true}]
+time = 4000      db updates done = [{1, 4}, {2, 4}, {3, 4}, {4, 4}, {5, 4}]
+time = 4000 client requests seen = [{1, 150}, {2, 150}, {3, 150}, {4, 150}, {5, 150}]
+time = 4000           total seen = 750 max lag = 746
+time = 4000       scouts spawned = [{1, 1357}, {2, 1503}, {3, 1727}, {4, 2243}, {5, 2724}]
+time = 4000          scouts down = [{1, 1357}, {2, 1503}, {3, 1727}, {4, 2243}, {5, 2724}]
+time = 4000        commanders up = [{1, 14596}, {2, 14241}, {3, 13379}, {4, 11916}, {5, 10512}]
+time = 4000      commanders down = [{1, 14596}, {2, 14241}, {3, 13375}, {4, 11916}, {5, 10512}]
+time = 4000       active leaders = [{1, false}, {2, false}, {3, true}, {4, false}, {5, false}]
 
-time = 5000      db updates done = []
-time = 5000 client requests seen = []
-time = 5000           total seen = 0 max lag = 0
-time = 5000       scouts spawned = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 5000          scouts down = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 5000        commanders up = []
-time = 5000      commanders down = []
-time = 5000       active leaders = [{1, true}, {2, true}, {3, true}, {4, true}, {5, true}]
+time = 5000      db updates done = [{1, 4}, {2, 4}, {3, 4}, {4, 4}, {5, 4}]
+time = 5000 client requests seen = [{1, 150}, {2, 150}, {3, 150}, {4, 150}, {5, 150}]
+time = 5000           total seen = 750 max lag = 746
+time = 5000       scouts spawned = [{1, 1666}, {2, 1848}, {3, 2122}, {4, 2788}, {5, 3373}]
+time = 5000          scouts down = [{1, 1666}, {2, 1848}, {3, 2122}, {4, 2788}, {5, 3373}]
+time = 5000        commanders up = [{1, 18488}, {2, 18231}, {3, 17113}, {4, 15066}, {5, 13284}]
+time = 5000      commanders down = [{1, 18488}, {2, 18231}, {3, 17113}, {4, 15066}, {5, 13284}]
+time = 5000       active leaders = [{1, false}, {2, false}, {3, false}, {4, false}, {5, false}]
 
-time = 6000      db updates done = []
-time = 6000 client requests seen = []
-time = 6000           total seen = 0 max lag = 0
-time = 6000       scouts spawned = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 6000          scouts down = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 6000        commanders up = []
-time = 6000      commanders down = []
-time = 6000       active leaders = [{1, true}, {2, true}, {3, true}, {4, true}, {5, true}]
+time = 6000      db updates done = [{1, 4}, {2, 4}, {3, 4}, {4, 4}, {5, 4}]
+time = 6000 client requests seen = [{1, 150}, {2, 150}, {3, 150}, {4, 150}, {5, 150}]
+time = 6000           total seen = 750 max lag = 746
+time = 6000       scouts spawned = [{1, 1982}, {2, 2184}, {3, 2528}, {4, 3320}, {5, 4001}]
+time = 6000          scouts down = [{1, 1982}, {2, 2183}, {3, 2528}, {4, 3320}, {5, 4001}]
+time = 6000        commanders up = [{1, 22506}, {2, 22151}, {3, 20823}, {4, 18188}, {5, 16056}]
+time = 6000      commanders down = [{1, 22506}, {2, 22151}, {3, 20823}, {4, 18188}, {5, 16056}]
+time = 6000       active leaders = [{1, false}, {2, false}, {3, false}, {4, false}, {5, false}]
 
-time = 7000      db updates done = []
-time = 7000 client requests seen = []
-time = 7000           total seen = 0 max lag = 0
-time = 7000       scouts spawned = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 7000          scouts down = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 7000        commanders up = []
-time = 7000      commanders down = []
-time = 7000       active leaders = [{1, true}, {2, true}, {3, true}, {4, true}, {5, true}]
+time = 7000      db updates done = [{1, 4}, {2, 4}, {3, 4}, {4, 4}, {5, 4}]
+time = 7000 client requests seen = [{1, 150}, {2, 150}, {3, 150}, {4, 150}, {5, 150}]
+time = 7000           total seen = 750 max lag = 746
+time = 7000       scouts spawned = [{1, 2284}, {2, 2514}, {3, 2940}, {4, 3845}, {5, 4622}]
+time = 7000          scouts down = [{1, 2284}, {2, 2513}, {3, 2939}, {4, 3845}, {5, 4621}]
+time = 7000        commanders up = [{1, 26384}, {2, 25889}, {3, 24393}, {4, 21296}, {5, 18772}]
+time = 7000      commanders down = [{1, 26384}, {2, 25889}, {3, 24393}, {4, 21294}, {5, 18772}]
+time = 7000       active leaders = [{1, false}, {2, false}, {3, false}, {4, true}, {5, false}]
 
-time = 8000      db updates done = []
-time = 8000 client requests seen = []
-time = 8000           total seen = 0 max lag = 0
-time = 8000       scouts spawned = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 8000          scouts down = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 8000        commanders up = []
-time = 8000      commanders down = []
-time = 8000       active leaders = [{1, true}, {2, true}, {3, true}, {4, true}, {5, true}]
+time = 8000      db updates done = [{1, 4}, {2, 4}, {3, 4}, {4, 4}, {5, 4}]
+time = 8000 client requests seen = [{1, 150}, {2, 150}, {3, 150}, {4, 150}, {5, 150}]
+time = 8000           total seen = 750 max lag = 746
+time = 8000       scouts spawned = [{1, 2583}, {2, 2844}, {3, 3333}, {4, 4357}, {5, 5236}]
+time = 8000          scouts down = [{1, 2583}, {2, 2843}, {3, 3332}, {4, 4356}, {5, 5236}]
+time = 8000        commanders up = [{1, 30234}, {2, 29725}, {3, 27907}, {4, 24306}, {5, 21460}]
+time = 8000      commanders down = [{1, 30234}, {2, 29725}, {3, 27907}, {4, 24306}, {5, 21460}]
+time = 8000       active leaders = [{1, false}, {2, false}, {3, false}, {4, false}, {5, false}]
 
-time = 9000      db updates done = []
-time = 9000 client requests seen = []
-time = 9000           total seen = 0 max lag = 0
-time = 9000       scouts spawned = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 9000          scouts down = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 9000        commanders up = []
-time = 9000      commanders down = []
-time = 9000       active leaders = [{1, true}, {2, true}, {3, true}, {4, true}, {5, true}]
+time = 9000      db updates done = [{1, 4}, {2, 4}, {3, 4}, {4, 4}, {5, 4}]
+time = 9000 client requests seen = [{1, 150}, {2, 150}, {3, 150}, {4, 150}, {5, 150}]
+time = 9000           total seen = 750 max lag = 746
+time = 9000       scouts spawned = [{1, 2861}, {2, 3147}, {3, 3689}, {4, 4807}, {5, 5793}]
+time = 9000          scouts down = [{1, 2861}, {2, 3147}, {3, 3688}, {4, 4807}, {5, 5793}]
+time = 9000        commanders up = [{1, 33790}, {2, 33267}, {3, 31113}, {4, 27260}, {5, 23966}]
+time = 9000      commanders down = [{1, 33790}, {2, 33267}, {3, 31113}, {4, 27260}, {5, 23966}]
+time = 9000       active leaders = [{1, false}, {2, false}, {3, false}, {4, false}, {5, false}]
 
-time = 10000      db updates done = []
-time = 10000 client requests seen = []
-time = 10000           total seen = 0 max lag = 0
-time = 10000       scouts spawned = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 10000          scouts down = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 10000        commanders up = []
-time = 10000      commanders down = []
-time = 10000       active leaders = [{1, true}, {2, true}, {3, true}, {4, true}, {5, true}]
+time = 10000      db updates done = [{1, 4}, {2, 4}, {3, 4}, {4, 4}, {5, 4}]
+time = 10000 client requests seen = [{1, 150}, {2, 150}, {3, 150}, {4, 150}, {5, 150}]
+time = 10000           total seen = 750 max lag = 746
+time = 10000       scouts spawned = [{1, 3117}, {2, 3426}, {3, 4002}, {4, 5215}, {5, 6293}]
+time = 10000          scouts down = [{1, 3117}, {2, 3426}, {3, 4001}, {4, 5214}, {5, 6292}]
+time = 10000        commanders up = [{1, 37052}, {2, 36459}, {3, 34193}, {4, 29990}, {5, 26346}]
+time = 10000      commanders down = [{1, 37052}, {2, 36459}, {3, 34193}, {4, 29990}, {5, 26346}]
+time = 10000       active leaders = [{1, false}, {2, false}, {3, false}, {4, false}, {5, false}]
 
-time = 11000      db updates done = []
-time = 11000 client requests seen = []
-time = 11000           total seen = 0 max lag = 0
-time = 11000       scouts spawned = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 11000          scouts down = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 11000        commanders up = []
-time = 11000      commanders down = []
-time = 11000       active leaders = [{1, true}, {2, true}, {3, true}, {4, true}, {5, true}]
+time = 11000      db updates done = [{1, 4}, {2, 4}, {3, 4}, {4, 4}, {5, 4}]
+time = 11000 client requests seen = [{1, 150}, {2, 150}, {3, 150}, {4, 150}, {5, 150}]
+time = 11000           total seen = 750 max lag = 746
+time = 11000       scouts spawned = [{1, 3367}, {2, 3695}, {3, 4322}, {4, 5631}, {5, 6779}]
+time = 11000          scouts down = [{1, 3367}, {2, 3695}, {3, 4322}, {4, 5630}, {5, 6779}]
+time = 11000        commanders up = [{1, 40328}, {2, 39693}, {3, 37231}, {4, 32650}, {5, 28796}]
+time = 11000      commanders down = [{1, 40328}, {2, 39693}, {3, 37231}, {4, 32650}, {5, 28791}]
+time = 11000       active leaders = [{1, false}, {2, false}, {3, false}, {4, false}, {5, true}]
 
-time = 12000      db updates done = []
-time = 12000 client requests seen = []
-time = 12000           total seen = 0 max lag = 0
-time = 12000       scouts spawned = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 12000          scouts down = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 12000        commanders up = []
-time = 12000      commanders down = []
-time = 12000       active leaders = [{1, true}, {2, true}, {3, true}, {4, true}, {5, true}]
+time = 12000      db updates done = [{1, 4}, {2, 4}, {3, 4}, {4, 4}, {5, 4}]
+time = 12000 client requests seen = [{1, 150}, {2, 150}, {3, 150}, {4, 150}, {5, 150}]
+time = 12000           total seen = 750 max lag = 746
+time = 12000       scouts spawned = [{1, 3622}, {2, 3968}, {3, 4656}, {4, 6059}, {5, 7306}]
+time = 12000          scouts down = [{1, 3622}, {2, 3968}, {3, 4656}, {4, 6059}, {5, 7306}]
+time = 12000        commanders up = [{1, 43693}, {2, 43025}, {3, 40408}, {4, 35464}, {5, 31233}]
+time = 12000      commanders down = [{1, 43692}, {2, 43025}, {3, 40395}, {4, 35464}, {5, 31232}]
+time = 12000       active leaders = [{1, true}, {2, false}, {3, true}, {4, false}, {5, true}]
 
-Exiting Node client3_05_williamprofit@127.0.0.1 - maxtime 15000 reached
-Exiting Node client1_05_williamprofit@127.0.0.1 - maxtime 15000 reached
-Exiting Node server3_05_williamprofit@127.0.0.1 - maxtime 15000 reached
-Exiting Node client5_05_williamprofit@127.0.0.1 - maxtime 15000 reached
-Exiting Node server5_05_williamprofit@127.0.0.1 - maxtime 15000 reached
-Exiting Node client2_05_williamprofit@127.0.0.1 - maxtime 15000 reached
-Exiting Node server4_05_williamprofit@127.0.0.1 - maxtime 15000 reached
-Exiting Node client4_05_williamprofit@127.0.0.1 - maxtime 15000 reached
-Exiting Node server2_05_williamprofit@127.0.0.1 - maxtime 15000 reached
-Exiting Node server1_05_williamprofit@127.0.0.1 - maxtime 15000 reached
-time = 13000      db updates done = []
-time = 13000 client requests seen = []
-time = 13000           total seen = 0 max lag = 0
-time = 13000       scouts spawned = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 13000          scouts down = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 13000        commanders up = []
-time = 13000      commanders down = []
-time = 13000       active leaders = [{1, true}, {2, true}, {3, true}, {4, true}, {5, true}]
+Exiting Node server2_57_williamprofit@127.0.0.1 - maxtime 15000 reached
+Exiting Node server3_57_williamprofit@127.0.0.1 - maxtime 15000 reached
+Exiting Node server1_57_williamprofit@127.0.0.1 - maxtime 15000 reached
+Exiting Node server5_57_williamprofit@127.0.0.1 - maxtime 15000 reached
+Exiting Node client3_57_williamprofit@127.0.0.1 - maxtime 15000 reached
+Exiting Node client5_57_williamprofit@127.0.0.1 - maxtime 15000 reached
+Exiting Node client4_57_williamprofit@127.0.0.1 - maxtime 15000 reached
+Exiting Node client2_57_williamprofit@127.0.0.1 - maxtime 15000 reached
+Exiting Node client1_57_williamprofit@127.0.0.1 - maxtime 15000 reached
+Exiting Node server4_57_williamprofit@127.0.0.1 - maxtime 15000 reached
+time = 13000      db updates done = [{1, 4}, {2, 4}, {3, 4}, {4, 4}, {5, 4}]
+time = 13000 client requests seen = [{1, 150}, {2, 150}, {3, 150}, {4, 150}, {5, 150}]
+time = 13000           total seen = 750 max lag = 746
+time = 13000       scouts spawned = [{1, 3882}, {2, 4250}, {3, 4997}, {4, 6498}, {5, 7833}]
+time = 13000          scouts down = [{1, 3882}, {2, 4250}, {3, 4997}, {4, 6497}, {5, 7832}]
+time = 13000        commanders up = [{1, 47146}, {2, 46343}, {3, 43601}, {4, 38222}, {5, 33808}]
+time = 13000      commanders down = [{1, 47146}, {2, 46343}, {3, 43601}, {4, 38222}, {5, 33808}]
+time = 13000       active leaders = [{1, false}, {2, false}, {3, false}, {4, false}, {5, false}]
 
-time = 14000      db updates done = []
-time = 14000 client requests seen = []
-time = 14000           total seen = 0 max lag = 0
-time = 14000       scouts spawned = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 14000          scouts down = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 14000        commanders up = []
-time = 14000      commanders down = []
-time = 14000       active leaders = [{1, true}, {2, true}, {3, true}, {4, true}, {5, true}]
+time = 14000      db updates done = [{1, 4}, {2, 4}, {3, 4}, {4, 4}, {5, 4}]
+time = 14000 client requests seen = [{1, 150}, {2, 150}, {3, 150}, {4, 150}, {5, 150}]
+time = 14000           total seen = 750 max lag = 746
+time = 14000       scouts spawned = [{1, 4108}, {2, 4388}, {3, 5275}, {4, 6710}, {5, 8232}]
+time = 14000          scouts down = [{1, 4108}, {2, 4388}, {3, 5275}, {4, 6709}, {5, 8232}]
+time = 14000        commanders up = [{1, 50142}, {2, 47911}, {3, 46485}, {4, 39748}, {5, 36370}]
+time = 14000      commanders down = [{1, 50142}, {2, 47911}, {3, 46485}, {4, 39748}, {5, 36370}]
+time = 14000       active leaders = [{1, false}, {2, false}, {3, false}, {4, false}, {5, false}]
 
-Exiting Node multipaxos_05_williamprofit@127.0.0.1 - maxtime 15000 reached
-time = 15000      db updates done = []
-time = 15000 client requests seen = []
-time = 15000           total seen = 0 max lag = 0
-time = 15000       scouts spawned = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 15000          scouts down = [{1, 1}, {2, 2}, {3, 3}, {4, 3}, {5, 4}]
-time = 15000        commanders up = []
-time = 15000      commanders down = []
-time = 15000       active leaders = [{1, true}, {2, true}, {3, true}, {4, true}, {5, true}]
+Exiting Node multipaxos_57_williamprofit@127.0.0.1 - maxtime 15000 reached
+time = 15000      db updates done = [{1, 5}, {2, 4}, {3, 24}, {4, 4}, {5, 5}]
+time = 15000 client requests seen = [{1, 150}, {2, 150}, {3, 150}, {4, 150}, {5, 150}]
+time = 15000           total seen = 750 max lag = 746
+time = 15000       scouts spawned = [{1, 4182}, {2, 4388}, {3, 5351}, {4, 6710}, {5, 8332}]
+time = 15000          scouts down = [{1, 4181}, {2, 4388}, {3, 5351}, {4, 6709}, {5, 8331}]
+time = 15000        commanders up = [{1, 51164}, {2, 47911}, {3, 47498}, {4, 39748}, {5, 37350}]
+time = 15000      commanders down = [{1, 51162}, {2, 47911}, {3, 47491}, {4, 39748}, {5, 37350}]
+time = 15000       active leaders = [{1, false}, {2, false}, {3, true}, {4, false}, {5, false}]
 
+{removed_failing_handler,default}
+{removed_failing_handler,default}
