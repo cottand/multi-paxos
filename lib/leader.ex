@@ -13,6 +13,22 @@ defmodule Leader do
     end
   end
 
+  defp pinging(other_leader, try_count) do
+    if try_count < 16 do
+      timeout = (:math.pow(2, try_count) |> round) * 100
+
+      :timer.sleep(timeout)
+      send(other_leader, {:ping, self()})
+
+      receive do
+        {:pong} ->
+          pinging(other_leader, try_count + 1)
+      after
+        timeout -> nil
+      end
+    end
+  end
+
   defp next(acceptors, replicas, ballot, proposals, active, config) do
     receive do
       # If a fellow leader pings us, we reply systematically
@@ -75,9 +91,9 @@ defmodule Leader do
 
         {active, ballot} =
           if Util.ballot_greater?(other_ballot, ballot) do
-            Util.log(config, :WARN, "Preempted by #{inspect({active, ballot})}")
+            # Util.log(config, :WARN, "Preempted by #{inspect({active, ballot})}")
 
-            if config.prevent_livelock, do: pinging(other_leader)
+            if config.prevent_livelock, do: pinging(other_leader, 0)
 
             new_ballot = {other_ballot_num + 1, config.node_num, self()}
             spawn(Scout, :start, [self(), acceptors, new_ballot, config])
@@ -92,19 +108,6 @@ defmodule Leader do
 
       unexpected ->
         Util.halt("Leader received unexpected #{inspect(unexpected)}")
-    end
-  end
-
-  defp pinging(other_leader) do
-    timeout = 200
-    :timer.sleep(timeout)
-    send(other_leader, {:ping, self()})
-
-    receive do
-      {:pong} ->
-        pinging(other_leader)
-    after
-      timeout -> nil
     end
   end
 end

@@ -84,7 +84,33 @@ defmodule Configuration do
     })
   end
 
-  # ADD YOUR OWN PARAMETER FUNCTIONS HERE
+
+  # -----------------------------------------------------------------------------
+  # Benchmarking configs
+
+  def params(:prevent_livelock) do
+    Map.merge(params(:debug2), %{
+      prevent_livelock: true,
+    })
+  end
+
+  def params(:high_load) do
+    Map.merge(params(:debug3), %{
+      max_requests: 200,
+      client_sleep: 0.5,
+      n_accounts: 1_000,
+    })
+  end
+
+  def params(:high_load_prevent_livelock) do
+    Map.merge(params(:debug3), %{
+      max_requests: 200,
+      client_sleep: 0.5,
+      n_accounts: 1_000,
+      prevent_livelock: true,
+    })
+  end
+
 end
 
 # module ----------------------------------------------------------------

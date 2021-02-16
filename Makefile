@@ -4,9 +4,9 @@
 # distributed algorithms, n.dulay, 29 jan 21 
 # coursework, paxos made moderately complex
 
-SERVERS  = 2
+SERVERS  = 5
 CLIENTS  = 5
-CONFIG   = debug3
+CONFIG   = prevent_livelock
 DEBUG    = 0
 MAX_TIME = 15000
 

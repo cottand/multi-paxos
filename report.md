@@ -50,9 +50,13 @@ replying `:pong`).
 
 #### Choosing $t_{ping}$
 
-$t_{ping}$ corresponds to both the pinging timeout (how long we should wait for a `:pong` message before considering the replica we are waiting for as dead), and to the interval between each `:ping` request.
+$t_{ping}$ corresponds to both the pinging timeout (how long we should wait
+for a `:pong` message before considering the replica we are waiting for as
+dead), and to the interval between each `:ping` request.
 
-Therefore, $t_{ping}$ must be large enough that the replica has time to reply, but small enough that a faulty replica can be preempted quickly. In our current domain of a banking app, we chose a delay of 200ms.
+Therefore, $t_{ping}$ must be large enough that the replica has time to
+reply, but small enough that a faulty replica can be preempted quickly. In
+our current domain of a banking app, we chose a delay of 200ms.
 
 ## Debugging and Testing Methodology (~0.5 pages)
 
