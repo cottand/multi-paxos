@@ -13,9 +13,10 @@ defmodule Leader do
 
   defp next(acceptors, replicas, ballot, proposals, active, config) do
     receive do
+      # If a fellow leader pings us, we reply systematically
       {:ping, other_leader} ->
-
         send(other_leader, {:pong})
+        next(acceptors, replicas, ballot, proposals, active, config)
 
       {:propose, slot, command} ->
         new_proposal = not Map.has_key?(proposals, slot)
