@@ -103,6 +103,13 @@ defmodule Configuration do
     })
   end
 
+  def params(:low_load_prevent_livelock_crash_1_server) do
+    Map.merge(params(:low_load), %{
+      prevent_livelock: true,
+      crash_server: %{1 => 500},
+    })
+  end
+
   def params(:high_load) do
     Map.merge(params(:default), %{
       max_requests: 1000,
@@ -113,6 +120,13 @@ defmodule Configuration do
   def params(:high_load_prevent_livelock) do
     Map.merge(params(:high_load), %{
       prevent_livelock: true,
+    })
+  end
+
+  def params(:high_load_prevent_livelock_crash_1_server) do
+    Map.merge(params(:high_load), %{
+      prevent_livelock: true,
+      crash_server: %{1 => 5000},
     })
   end
 

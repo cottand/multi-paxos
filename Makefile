@@ -6,7 +6,7 @@
 
 SERVERS  = 5
 CLIENTS  = 5
-CONFIG   = very_high_load_prevent_livelock
+CONFIG   = high_load_prevent_livelock_crash_1_server
 DEBUG    = 0
 MAX_TIME = 60000
 
