@@ -96,13 +96,13 @@ defmodule Configuration do
 
   def params(:high_load) do
     Map.merge(params(:debug3), %{
+      max_requests: 100,
+      client_sleep: 10
     })
   end
 
   def params(:high_load_prevent_livelock) do
-    Map.merge(params(:debug3), %{
-      prevent_livelock: true,
-    })
+    Map.merge(params(:prevent_livelock), params(:high_load))
   end
 
 end

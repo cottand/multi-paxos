@@ -9,12 +9,12 @@ defmodule Leader do
         active = false
         send(config.monitor, {:LEADER_ACTIVE, active, config.node_num})
         proposals = Map.new()
-        next(acceptors, replicas, ballot, proposals, active, config)
+        next(acceptors, replicas, ballot, proposals, active, config, -1)
     end
   end
 
-  defp pinging(other_leader, try_count) do
-    if try_count < 16 do
+  defp pinging(other_leader, ballot, try_count, time_left) do
+    if try_count < 16 and time_left > 0  do
       timeout = (:math.pow(2, try_count) |> round) * 100
 
       :timer.sleep(timeout)
@@ -22,19 +22,19 @@ defmodule Leader do
 
       receive do
         {:pong} ->
-          pinging(other_leader, try_count + 1)
+          pinging(other_leader, ballot, try_count + 1, time_left - timeout)
       after
         timeout -> nil
       end
     end
   end
 
-  defp next(acceptors, replicas, ballot, proposals, active, config) do
+  defp next(acceptors, replicas, ballot, proposals, active, config, latest_preempted_ballot_num) do
     receive do
       # If a fellow leader pings us, we reply systematically
       {:ping, other_leader} ->
         send(other_leader, {:pong})
-        next(acceptors, replicas, ballot, proposals, active, config)
+        next(acceptors, replicas, ballot, proposals, active, config, latest_preempted_ballot_num)
 
       {:propose, slot, command} ->
         new_proposal = not Map.has_key?(proposals, slot)
@@ -54,7 +54,7 @@ defmodule Leader do
               ])
         end
 
-        next(acceptors, replicas, ballot, proposals, active, config)
+        next(acceptors, replicas, ballot, proposals, active, config, latest_preempted_ballot_num)
 
       # pvals :: MapSet.t({ballot, slot, command})
       {:adopted, ^ballot, pvals} ->
@@ -73,7 +73,7 @@ defmodule Leader do
 
         active = true
         send(config.monitor, {:LEADER_ACTIVE, active, config.node_num})
-        next(acceptors, replicas, ballot, proposals, active, config)
+        next(acceptors, replicas, ballot, proposals, active, config, latest_preempted_ballot_num)
 
       {:adopted, other_ballot, _} ->
         Util.halt(
@@ -91,9 +91,10 @@ defmodule Leader do
 
         {active, ballot} =
           if Util.ballot_greater?(other_ballot, ballot) do
-            # Util.log(config, :WARN, "Preempted by #{inspect({active, ballot})}")
+            Util.log(config, :DEBUG, "Preempted by #{inspect({active, ballot})}")
 
-            if config.prevent_livelock, do: pinging(other_leader, 0)
+            # back off for a period of time t, where t is longer if the ballot number is big
+            if config.prevent_livelock, do: pinging(other_leader, other_ballot, 0, other_ballot_num * 20)
 
             new_ballot = {other_ballot_num + 1, config.node_num, self()}
             spawn(Scout, :start, [self(), acceptors, new_ballot, config])
@@ -104,7 +105,7 @@ defmodule Leader do
           end
 
         send(config.monitor, {:LEADER_ACTIVE, active, config.node_num})
-        next(acceptors, replicas, ballot, proposals, active, config)
+        next(acceptors, replicas, ballot, proposals, active, config, latest_preempted_ballot_num)
 
       unexpected ->
         Util.halt("Leader received unexpected #{inspect(unexpected)}")
