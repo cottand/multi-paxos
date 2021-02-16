@@ -1,3 +1,5 @@
+# Nicolas D'Cotta (nd3018) and William Profit (wtp18)
+
 defmodule Leader do
   def start(config) do
     receive do
@@ -75,11 +77,8 @@ defmodule Leader do
           if Util.ballot_greater?(other_ballot, ballot) do
             Util.log(config, :WARN, "Preempted by #{inspect({active, ballot})}")
 
-            # TODO: this here means leader got preempted - spawning a new scout and just increasing
-            # ballot numper will lead to a livelock between 2 leaders (they each keep increasing the ballot number)
-            # so we have to do something to ensure _liveness_ - paper suggests just pinging the
-            # other leader but I am not sure how that helps.
-            pinging(other_leader)
+            if config.prevent_livelock, do: pinging(other_leader)
+
             new_ballot = {other_ballot_num + 1, config.node_num, self()}
             spawn(Scout, :start, [self(), acceptors, new_ballot, config])
 
@@ -97,13 +96,15 @@ defmodule Leader do
   end
 
   defp pinging(other_leader) do
+    timeout = 200
+    :timer.sleep(timeout)
     send(other_leader, {:ping, self()})
 
     receive do
       {:pong} ->
         pinging(other_leader)
     after
-      1_000 -> nil
+      timeout -> nil
     end
   end
 end

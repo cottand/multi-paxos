@@ -1,3 +1,5 @@
+# Nicolas D'Cotta (nd3018) and William Profit (wtp18)
+
 # distributed algorithms, n.dulay 29 jan 2021
 # coursework, paxos made moderately complex
 
@@ -32,7 +34,9 @@ defmodule Configuration do
       max_amount: 1_000,
       # print transaction log summary every print_after msecs
       print_after: 1_000,
-      crash_server: %{}
+      crash_server: %{},
+      # Use pinging to prevent livelock between leaders
+      prevent_livelock: false,
     }
   end
 
@@ -75,8 +79,8 @@ defmodule Configuration do
   def params(:debug3) do
     Map.merge(params(:default), %{
       debug_level: 1,
-      max_requests: 5,
-      client_sleep: 50
+      max_requests: 30,
+      client_sleep: 10
     })
   end
 

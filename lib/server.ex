@@ -1,5 +1,7 @@
+# Nicolas D'Cotta (nd3018) and William Profit (wtp18)
 
-# distributed algorithms, n.dulay 29 jan 2021 
+
+# distributed algorithms, n.dulay 29 jan 2021
 # coursework, paxos made moderately complex
 
 defmodule Server do
@@ -27,4 +29,3 @@ def start config, server_num, multipaxos do
 end # start
 
 end # Server
-

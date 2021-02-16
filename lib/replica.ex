@@ -1,3 +1,5 @@
+# Nicolas D'Cotta (nd3018) and William Profit (wtp18)
+
 defmodule Replica do
   @type replica_state :: %{
           :database => pid(),
@@ -52,7 +54,7 @@ defmodule Replica do
     end
   end
 
-  defp perform(state, command, config) do
+  defp perform(state, command, _config) do
     {client, command_id, op} = command
 
     state =
