@@ -89,18 +89,24 @@ defmodule Configuration do
   # -----------------------------------------------------------------------------
   # Benchmarking configs
 
-  def params(:prevent_livelock) do
-
-
+  def params(:low_load) do
     Map.merge(params(:default), %{
+      debug_level: 1,
+      max_requests: 100,
+      client_sleep: 10,
+    })
+  end
+
+  def params(:low_load_prevent_livelock) do
+    Map.merge(params(:low_load), %{
       prevent_livelock: true,
     })
   end
 
   def params(:high_load) do
-    Map.merge(params(:debug3), %{
-      max_requests: 600,
-      client_sleep: 5
+    Map.merge(params(:default), %{
+      max_requests: 1000,
+      client_sleep: 5,
     })
   end
 
@@ -110,6 +116,18 @@ defmodule Configuration do
     })
   end
 
+  def params(:very_high_load) do
+    Map.merge(params(:default), %{
+      max_requests: 5000,
+      client_sleep: 2,
+    })
+  end
+
+  def params(:very_high_load_prevent_livelock) do
+    Map.merge(params(:very_high_load), %{
+      prevent_livelock: true,
+    })
+  end
 end
 
 # module ----------------------------------------------------------------

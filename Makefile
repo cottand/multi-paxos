@@ -6,9 +6,9 @@
 
 SERVERS  = 5
 CLIENTS  = 5
-CONFIG   = high_load_prevent_livelock
+CONFIG   = very_high_load_prevent_livelock
 DEBUG    = 0
-MAX_TIME = 40000
+MAX_TIME = 60000
 
 START    = Multipaxos.start
 HOST	:= 127.0.0.1

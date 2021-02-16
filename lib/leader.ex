@@ -102,7 +102,7 @@ defmodule Leader do
 
         {active, ballot, waiting_period_ms} =
           if Util.ballot_greater?(other_ballot, ballot) do
-            Util.log(config, :WARN, "Preempted by #{inspect({active, ballot})}")
+            Util.log(config, :DEBUG, "Preempted by #{inspect({active, ballot})}")
 
             # back off for a period of time t, where t is longer if the ballot number is big
             waiting_period_ms =
