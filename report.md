@@ -40,23 +40,34 @@ variables into a `state` dictionary that gets updated and passed around.
 
 ### Liveness
 
-To implement liveness, we chose to have leaders enter a 'pinging mode' when
-they get preemted. In this 'pinging mode', they send a `:ping` message to the
-leader that preempted them (ever $t_{ping}$ ms, for example). All leaders
-sytematically reply `:pong` to every `:ping` request. Therefore, when a
-leader $\lambda$ gets preempted by another leader $\lambda'$, $\lambda$ will
-become inactive until $\lambda'$ becomes faulty (ie, until $\lambda'$ stops
-replying `:pong`).
+To implement liveness, we adpoted an approach where a Leader has a $t_{wait}
+time period as part of their state.
+When they get preempted, they wait $t_{wait}$ before trying to increase their
+ballot number.
 
-#### Choosing $t_{ping}$
+#### Choosing $t_{wait}$ 
 
-$t_{ping}$ corresponds to both the pinging timeout (how long we should wait
-for a `:pong` message before considering the replica we are waiting for as
-dead), and to the interval between each `:ping` request.
+We implemented TCP-like Additive Increase, Multiplicative Decrease. When a
+leader succesfully has one of its ballots adopted, it increases $t_{wait}$
+slightly by $\Delta$. When it gets preempted, it multiplies it by a factor
+$\gamma$ close to but smaller than 1.
 
-Therefore, $t_{ping}$ must be large enough that the replica has time to
-reply, but small enough that a faulty replica can be preempted quickly. In
-our current domain of a banking app, we chose a delay of 200ms.
+For a more aggressive setup (ie, more susceptible to live locking, but more
+efficient) we can decrease $\Delta$ and increase $\gamma$, and viceversa for
+a more conservative setup that may be less performant but less likely to
+livelock.
+
+$t_{wait}$ allows a leader $\lambda$ that succesfully gets ballots out often
+to 'leave room' for another leader $\lambda'$ to preempt it. Once $\lambda'$
+has several succesful adoptions, it will start backing off and leaving room
+for $\lambda$ again.
+
+#### Detecting Leader Failure
+
+While a leader $\lambda$ waits for $\lambda'$ (due to the backoff described
+above). It doesn't just sit idle - it pings $\lambda'$ to make sure it didn't
+fail. We implement this failure detection to quickly preempt faulty leaders,
+even if $t_{wait}$ of $\lambda$ is large.
 
 ## Debugging and Testing Methodology (~0.5 pages)
 
@@ -120,6 +131,7 @@ The program was run uder MacOS on a 2019 16" MacBook Pro with a 2.6 GHz
 TODO (~1 page)
 
 ### Lifecycle of a Client's `command`
+
 ...when a leader had been elected. Note how we can skip phase one (`:p1*` messages altoghether)
 ```sequence
 Client->Replica: {:request cmd}
@@ -133,3 +145,5 @@ Commander->Replica: {:decision, slot, ballot}
 Replica->DB: {:EXECUTE, transaction}
 Replica->Client: {:CLIENT_REPLY, cmd_id}
 ```
+
+TODO rM diagram
