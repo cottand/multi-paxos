@@ -37,6 +37,7 @@ defmodule Configuration do
       crash_server: %{},
       # Use pinging to prevent livelock between leaders
       prevent_livelock: false,
+      debug_level: 1,
     }
   end
 
@@ -89,20 +90,24 @@ defmodule Configuration do
   # Benchmarking configs
 
   def params(:prevent_livelock) do
-    Map.merge(params(:debug2), %{
+
+
+    Map.merge(params(:default), %{
       prevent_livelock: true,
     })
   end
 
   def params(:high_load) do
     Map.merge(params(:debug3), %{
-      max_requests: 100,
-      client_sleep: 10
+      max_requests: 600,
+      client_sleep: 5
     })
   end
 
   def params(:high_load_prevent_livelock) do
-    Map.merge(params(:prevent_livelock), params(:high_load))
+    Map.merge(params(:high_load), %{
+      prevent_livelock: true,
+    })
   end
 
 end
