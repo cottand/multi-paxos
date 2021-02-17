@@ -76,22 +76,44 @@ unit test every module due to their nature which made then difficult to test.
 
 ## Correctness of the System
 
-TODO how on earth do we do this wtf 2.5 pages????
+We have run our program under various scenarios, of which the outputs can be
+found under the `outputs` directory.
 
-To run:
-- normal load
-- 1 server crash
-- high load live locking
-- high load no live locking
+We ran two experiments with 2 servers and 5 clients under low load, with and
+without livelock prevention. The bulk of the experiment is done with 5
+servers and 5 clients, tested under low, high and very high load, with and
+without livelock prevention and also with and without a server crashing.
+
+First off we notice that using 2 servers generally gives better performance
+than using 5 servers. This is because it is to coordinate the leaders into
+getting a majority with 2 leaders rather than 5, where more messages need to
+get exchanged and more preemptions will occur. An other factor is that more
+livelocking occurs with more servers (*I THINK????*).
+
+Without livelock prevention we can almost manage low loads but then very
+little work gets done under high and very high load. This is due to the fact
+that under higher workloads, leaders are competing more to get their ballots
+adopted so livelock occurs with a higher probability.
+
+On the other hand, adding livelock prevention significantly improves
+performance and reliability. We are able to manage high loads and even very
+high loads although for the latter we encounter performance issues, where we
+are making progress but not fast enough given the rate of incoming requests.
+This is seen as the update rate lagging behind the request rate. However the
+system is still correct and would eventually catch up if given the time to or
+if ran with better performance.
+
+When crashing a server, we notice that the behaviour of the system is not
+affected, other servers continue serving clients as expected.
 
 ### Environment
 
-Linux :))))
-The program was run uder Arch Linux on a #machine specs#
+The program was run uder MacOS on a 2019 16" MacBook Pro with a 2.6 GHz
+6-Core Intel Core i7 CPU and 16 GB 2667 MHz DDR4 RAM.
 
 ## Outputs and Interesting Findings
 
-TODO interesting stuff
+*This might be repeating section "Correctness of the system?"*
 
 ## Diagrams and Requests Flow
 
