@@ -3,7 +3,7 @@
 **6009 Distributed Algorithms Coursework**  
 Nicolas D'Cotta (nd3018) and William Profit (wtp18)
 
-## Design and Implementation (~1page)
+## Design and Implementation
 
 We closely followed the design outlined in the paper "Paxos Made Moderately
 Complex" by Robbert Van Renesse and Deniz Altinbuken with a few
@@ -68,7 +68,7 @@ above). It doesn't just sit idle - it pings $\lambda'$ to make sure it didn't
 fail. We implement this failure detection to quickly preempt faulty leaders
 even if the $t_{wait}$ of $\lambda$ is large.
 
-## Debugging and Testing Methodology (~0.5 pages)
+## Debugging and Testing Methodology
 
 We extended `Monitor` by adding an _active leaders_ field. Particularly
 useful in testing liveliness, and determining when a slow system is 'stuck'.
