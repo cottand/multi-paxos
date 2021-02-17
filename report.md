@@ -138,6 +138,16 @@ We are sure our system has _liveness_ (ie, _'if a client broadcasts a new comman
 When crashing a server, we notice that the behaviour of the system is not
 affected, other servers continue serving clients as expected.
 
+We can conclude that although our system us correct, it is still slow enough
+that it does not manage to handle the high load of the `:default` configuration
+(provided with the code skeleton) of 5 clients, 5 servers, 5000
+requests/client, under 60s. Unfortunately, with our current implementation
+the system gets slower as we progress through more client requests. Given we
+do still make progress, we have reson to think that if we did implement an
+efficient variation of paxos (e.g. change acceptor to use integers not sets,
+delete old slots) it would perform very well.
+
+
 ### Environment
 
 The program was run uder MacOS on a 2019 16" MacBook Pro with a 2.6 GHz
