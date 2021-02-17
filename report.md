@@ -52,7 +52,7 @@ slightly by $\Delta$. When it gets preempted, it multiplies it by a factor
 $\gamma$ close to but smaller than 1.
 
 For a more aggressive setup (ie, more susceptible to live locking, but more
-efficient) we can decrease $\Delta$ and increase $\gamma$, and viceversa for
+efficient) we can decrease $\Delta$ and increase $\gamma$, and vice versa for
 a more conservative setup that may be less performant but less likely to
 livelock.
 
@@ -126,13 +126,13 @@ if ran with better performance.
 
 We are sure our system has _liveness_ (ie, _'if a client broadcasts a new command to all replicas, that it eventually receives at least one response'_) once livelock prevention is introduced. This is because of how $t_{wait}$ is chosen when a leader gets preempted (described in the Implementation section): when a leader $\lambda$ fails to get its ballot adopted by getting preempted (by say, $\lambda'$), two scenarios are possible:
 - $\lambda$ has time to get its ballot adopted without getting preempted by $\lambda'$
-  - This appens because the $t_{wait}'$ of $\lambda'$ is large enough, or by chance
+  - This happens because the $t_{wait}'$ of $\lambda'$ is large enough, or by chance
   - This scenario does not lead to a livelock, as described in the paper
   - When $\lambda'$ does preempt $\lambda$, its $t_{wait}'$ will be smaller than $t_{wait}$, so it will have time to get its ballot approved. If it does not manage and gets preempted back, it will 'try harder' with an even smaller $t_{wait}'$
 - $\lambda$ preempts $\lambda'$ back (might lead to a livelock)
   - $t_{wait}'$ of $\lambda'$ was increased in the previous round (because, as the preemptor, it received `:adopted`), while $t_{wait}$ of $\lambda$ decreased
-  - $t_{wait}$ it liekly decreased more than $t_{wait}'$ increased, due to TCP-like AIMD
-  - Thus, for every likevelock-like round, it becomes increasingly likely for one of the competing leaders to decrease their $t_{wait}$ so much that they will be quick enough to preempt the other replica, which is waiting for longer for trying again
+  - $t_{wait}$ is likely decreased more than $t_{wait}'$ increased, due to TCP-like AIMD
+  - Thus, for every likevelock-like round, it becomes increasingly likely for one of the competing leaders to decrease their $t_{wait}$ so much that they will be quick enough to preempt the other replica, which is waiting for longer to try again.
   - This guarantees that _eventually_, one of the leaders will win out. When they do, their $t_{wait}$ will become large again as it gets more succesful adoptions, preparing for the next 'livelock like' scenario that we just described.
 
 When crashing a server, we notice that the behaviour of the system is not

@@ -55,7 +55,7 @@ defmodule Replica do
   end
 
   defp perform(state, command, _config) do
-    {client, command_id, op} = command
+    {_client, _command_id, op} = command
 
     state =
       if Enum.any?(state.decisions, fn {s, c} -> s < state.slot_out and c == command end) do
@@ -63,8 +63,6 @@ defmodule Replica do
       else
         # Execute op
         send(state.database, {:EXECUTE, op})
-        # Answer client
-        send(client, {:CLIENT_REPLY, command_id, "lol"})
 
         %{state | slot_out: state.slot_out + 1}
       end

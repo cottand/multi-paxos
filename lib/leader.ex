@@ -36,7 +36,7 @@ defmodule Leader do
   end
 
   defp next(acceptors, replicas, ballot, proposals, active, config, waiting_period_ms) do
-    Util.log(config, :WARN, "Current waiting time: #{waiting_period_ms}")
+    Util.log(config, :DEBUG, "Current waiting time: #{waiting_period_ms}")
     receive do
       # If a fellow leader pings us, we reply systematically
       {:ping, other_leader} ->
