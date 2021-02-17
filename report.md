@@ -1,19 +1,19 @@
-# Report
+# Multi-Paxos Elixir Implementation Report
 
+**6009 Distributed Algorithms Coursework**  
 Nicolas D'Cotta (nd3018) and William Profit (wtp18)
-6009 Distributed Algorithms 
-Coursework
 
 ## Design and Implementation (~1page)
 
-We followed the design outlined in the paper "Paxos Made Moderately Complex"
-by Robbert Van Renesse and Deniz Altinbuken with a few modifications.
+We closely followed the design outlined in the paper "Paxos Made Moderately
+Complex" by Robbert Van Renesse and Deniz Altinbuken with a few
+modifications.
 
 Most notably we make use of a collapsed architecture where a server process
-hosts one replica, one acceptor, one leader and one database. This allows for
-a simpler design while still ensuring correctness of the algorithm. The
-server and client processes initially get spawned by the over arching
-multipaxos process which deals with bootstrapping the system.
+is colocated with one replica, one acceptor, one leader and one database.
+This allows for a simpler design while still ensuring correctness of the
+algorithm. The server and client processes initially get spawned by the over
+arching `multipaxos` process which deals with bootstrapping the system.
 
 We used type annotations wherever we could in order to enhance readability
 and have `mix` provide us with additional information to catch bugs earlier
@@ -40,10 +40,9 @@ variables into a `state` dictionary that gets updated and passed around.
 
 ### Liveness
 
-To implement liveness, we adpoted an approach where a Leader has a $t_{wait}
-time period as part of their state.
-When they get preempted, they wait $t_{wait}$ before trying to increase their
-ballot number.
+To implement liveness, we adpoted an approach where a Leader has a $t_{wait}$
+time period as part of their state. When they get preempted, they wait
+$t_{wait}$ before trying to increase their ballot number.
 
 #### Choosing $t_{wait}$ 
 
@@ -66,8 +65,8 @@ for $\lambda$ again.
 
 While a leader $\lambda$ waits for $\lambda'$ (due to the backoff described
 above). It doesn't just sit idle - it pings $\lambda'$ to make sure it didn't
-fail. We implement this failure detection to quickly preempt faulty leaders,
-even if $t_{wait}$ of $\lambda$ is large.
+fail. We implement this failure detection to quickly preempt faulty leaders
+even if the $t_{wait}$ of $\lambda$ is large.
 
 ## Debugging and Testing Methodology (~0.5 pages)
 
@@ -82,29 +81,40 @@ Acceptor, etc) before every message.
 
 We also wrote a testing suite that unit tests for certain modules of our
 implementation. This has allowed us to be more confident in making changes as
-we ensured we were not breaking things elsewhere. We were however not able to
-unit test every module due to their nature which made then difficult to test.
+we ensured we were not breaking things elsewhere. Unit testing every module
+was however not possible due to the distributed atchitecture of the
+application
 
-## Correctness of the System
+## Correctness of the System, Outputs and Findings
 
-We have run our program under various scenarios, of which the outputs can be
+We have run our program under several scenarios, of which the outputs can be
 found under the `outputs` directory.
 
-We ran two experiments with 2 servers and 5 clients under low load, with and
-without livelock prevention. The bulk of the experiment is done with 5
-servers and 5 clients, tested under low, high and very high load, with and
-without livelock prevention and also with and without a server crashing.
+> We call 'livelock prevention' the implementation described above, where a leader backs off if no other leader is preempting it.
+
+We ran several experiments:
+- With 2 servers, 5 clients, on low load
+  - With livelock prevention
+  - Without livelock prevention
+- With 5 servers, 5 clients
+  - With livelock prevention
+    - Low load
+    - High Load
+    - High load, where a server artifically crashes mid execution
+    - Very high load
+  - Without livelock prevention
+    - Low load
+    - High Load
+    - Very high load
 
 First off we notice that using 2 servers generally gives better performance
-than using 5 servers. This is because it is to coordinate the leaders into
-getting a majority with 2 leaders rather than 5, where more messages need to
-get exchanged and more preemptions will occur. An other factor is that more
-livelocking occurs with more servers (*I THINK????*).
+than using 5 servers. This is because the majority required to achieve
+consensus is smaller, so there is less overhead. 
 
 Without livelock prevention we can almost manage low loads but then very
 little work gets done under high and very high load. This is due to the fact
 that under higher workloads, leaders are competing more to get their ballots
-adopted so livelock occurs with a higher probability.
+adopted so livelock occurs with a higher probability, and thus more often.
 
 On the other hand, adding livelock prevention significantly improves
 performance and reliability. We are able to manage high loads and even very
@@ -114,6 +124,17 @@ This is seen as the update rate lagging behind the request rate. However the
 system is still correct and would eventually catch up if given the time to or
 if ran with better performance.
 
+We are sure our system has _liveness_ (ie, _'if a client broadcasts a new command to all replicas, that it eventually receives at least one response'_) once livelock prevention is introduced. This is because of how $t_{wait}$ is chosen when a leader gets preempted (described in the Implementation section): when a leader $\lambda$ fails to get its ballot adopted by getting preempted (by say, $\lambda'$), two scenarios are possible:
+- $\lambda$ has time to get its ballot adopted without getting preempted by $\lambda'$
+  - This appens because the $t_{wait}'$ of $\lambda'$ is large enough, or by chance
+  - This scenario does not lead to a livelock, as described in the paper
+  - When $\lambda'$ does preempt $\lambda$, its $t_{wait}'$ will be smaller than $t_{wait}$, so it will have time to get its ballot approved. If it does not manage and gets preempted back, it will 'try harder' with an even smaller $t_{wait}'$
+- $\lambda$ preempts $\lambda'$ back (might lead to a livelock)
+  - $t_{wait}'$ of $\lambda'$ was increased in the previous round (because, as the preemptor, it received `:adopted`), while $t_{wait}$ of $\lambda$ decreased
+  - $t_{wait}$ it liekly decreased more than $t_{wait}'$ increased, due to TCP-like AIMD
+  - Thus, for every likevelock-like round, it becomes increasingly likely for one of the competing leaders to decrease their $t_{wait}$ so much that they will be quick enough to preempt the other replica, which is waiting for longer for trying again
+  - This guarantees that _eventually_, one of the leaders will win out. When they do, their $t_{wait}$ will become large again as it gets more succesful adoptions, preparing for the next 'livelock like' scenario that we just described.
+
 When crashing a server, we notice that the behaviour of the system is not
 affected, other servers continue serving clients as expected.
 
@@ -121,10 +142,6 @@ affected, other servers continue serving clients as expected.
 
 The program was run uder MacOS on a 2019 16" MacBook Pro with a 2.6 GHz
 6-Core Intel Core i7 CPU and 16 GB 2667 MHz DDR4 RAM.
-
-## Outputs and Interesting Findings
-
-*This might be repeating section "Correctness of the system?"*
 
 ## Diagrams and Requests Flow
 
