@@ -2,6 +2,11 @@
 
 defmodule Leader do
   def start(config) do
+    config = Map.merge(config, %{
+      wait_increase_ms: 10,
+      initial_wait_period: 30,
+      wait_decrease_factor: 0.9,
+    })
     receive do
       {:BIND, acceptors, replicas} ->
         ballot = {0, config.node_num, self()}
@@ -9,14 +14,14 @@ defmodule Leader do
         active = false
         send(config.monitor, {:LEADER_ACTIVE, active, config.node_num})
         proposals = Map.new()
-        next(acceptors, replicas, ballot, proposals, active, config, 25)
+        next(acceptors, replicas, ballot, proposals, active, config, config.initial_wait_period)
     end
   end
 
-  defp wait(other_leader, waiting_period_ms, other_ballot_num) do
+  defp wait(other_leader, waiting_period_ms, other_ballot_num, config) do
     time_left = other_ballot_num * waiting_period_ms
     wait_helper(other_leader, time_left)
-    waiting_period_ms * 0.9
+    waiting_period_ms * config.wait_decrease_factor
   end
 
   # returns after waiting_time_left, or when we think the other leader might have crashed
@@ -67,7 +72,7 @@ defmodule Leader do
       {:adopted, ^ballot, pvals} ->
         Util.log(config, :DEBUG, "active: #{active}, received ADOPTED")
         waiting_period_ms =
-          if config.prevent_livelock, do: waiting_period_ms + 10, else: waiting_period_ms
+          if config.prevent_livelock, do: waiting_period_ms + config.wait_increase_ms, else: waiting_period_ms
 
         proposals = Util.update_with(proposals, Util.pmax(pvals, config))
 
@@ -106,7 +111,7 @@ defmodule Leader do
             # back off for a period of time t, where t is longer if the ballot number is big
             waiting_period_ms =
               if config.prevent_livelock,
-                do: wait(other_leader, waiting_period_ms, other_ballot_num),
+                do: wait(other_leader, waiting_period_ms, other_ballot_num, config),
                 else: waiting_period_ms
 
             new_ballot = {other_ballot_num + 1, config.node_num, self()}
