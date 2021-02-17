@@ -15,6 +15,7 @@ defmodule Commander do
 
           if MapSet.size(acceptors_waiting) < MapSet.size(acceptors) / 2 do
             for replica <- replicas, do: send(replica, {:decision, slot, command})
+            send(leader_pid, {:success_decision})
             exitC(config)
           end
 
