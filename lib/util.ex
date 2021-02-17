@@ -114,17 +114,6 @@ defmodule Util do
   # Whether this ballot is greater than the other, in lexicographic order
   @spec ballot_greater?(ballot(), ballot()) :: boolean
   def ballot_greater?(b1, b2), do: ballot_as_num(b1) > ballot_as_num(b2)
-  # def ballot_greater?(:bottom, _), do: false
-
-  # def ballot_greater?(_, :bottom), do: true
-
-  # def ballot_greater?({this_num, this_pid}, {other_num, other_pid}) do
-  #   if this_num != other_num do
-  #     this_num > other_num
-  #   else
-  #     # numbers are equal! compare hashes from PIDs
-  #     ballot_as_num({this_num, this_pid}) > ballot_as_num({other_num, other_pid})
-  #   end
   # end
 
   # { client_id, command_id, operation }
@@ -152,7 +141,6 @@ defmodule Util do
     Map.merge(ys, elems_of_xs_not_in_ys)
   end
 
-  # I really hope this one works ;-;
   @spec pmax(pvalues(), map) :: proposal_set()
   def pmax(pvalues, config) do
     # map of s => [{b, c}]

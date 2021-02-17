@@ -2,11 +2,13 @@
 
 defmodule Leader do
   def start(config) do
-    config = Map.merge(config, %{
-      wait_increase_ms: 10,
-      initial_wait_period: 30,
-      wait_decrease_factor: 0.9,
-    })
+    config =
+      Map.merge(config, %{
+        wait_increase_ms: 10,
+        initial_wait_period: 30,
+        wait_decrease_factor: 0.9
+      })
+
     receive do
       {:BIND, acceptors, replicas} ->
         ballot = {0, config.node_num, self()}
@@ -27,9 +29,11 @@ defmodule Leader do
   # returns after waiting_time_left, or when we think the other leader might have crashed
   defp wait_helper(other_leader, time_left) do
     timeout = 100
+
     if time_left > 0 do
       send(other_leader, {:ping, self()})
       :timer.sleep(timeout)
+
       receive do
         {:pong} ->
           wait_helper(other_leader, time_left - timeout)
@@ -37,7 +41,6 @@ defmodule Leader do
         timeout -> nil
       end
     end
-
   end
 
   defp next(acceptors, replicas, ballot, proposals, active, config, waiting_period_ms) do
@@ -71,8 +74,11 @@ defmodule Leader do
       # pvals :: MapSet.t({ballot, slot, command})
       {:adopted, ^ballot, pvals} ->
         Util.log(config, :DEBUG, "active: #{active}, received ADOPTED")
+
         waiting_period_ms =
-          if config.prevent_livelock, do: waiting_period_ms + config.wait_increase_ms, else: waiting_period_ms
+          if config.prevent_livelock,
+            do: waiting_period_ms + config.wait_increase_ms,
+            else: waiting_period_ms
 
         proposals = Util.update_with(proposals, Util.pmax(pvals, config))
 
@@ -128,6 +134,7 @@ defmodule Leader do
       {:pong} ->
         # some leader replied to us with a pong from when we were pinging them
         nil
+
       unexpected ->
         Util.halt("Leader received unexpected #{inspect(unexpected)}")
     end

@@ -155,11 +155,13 @@ The program was run uder MacOS on a 2019 16" MacBook Pro with a 2.6 GHz
 
 ## Diagrams and Requests Flow
 
-TODO (~1 page)
 
 ### Lifecycle of a Client's `command`
 
-...when a leader had been elected. Note how we can skip phase one (`:p1*` messages altoghether)
+We show the UML diagram of the lifecycle of a Client's `command`, when one of
+the leaders is active. Note how we can skip phase one (`:p1*` messages)
+altoghether.
+
 ```sequence
 Client->Replica: {:request cmd}
 Replica->Leader: {:propose, slot, cmd}
@@ -173,4 +175,12 @@ Replica->DB: {:EXECUTE, transaction}
 Replica->Client: {:CLIENT_REPLY, cmd_id}
 ```
 
-TODO rM diagram
+### Overview of Flow
+
+We present a flow diagram, where we show the commands that a new command form a client may (or may not) trigger. We do not show every single command that exists in our implementation. Rather, we show for example how a second replica might get `:preempted`, with that command originating from a `:p2b` that an Acceptor may with to a Commander. The content of that `:p2b` originates from the ballots that same Acceptor may have been receiving from a different Commander.
+
+![](https://codimd.s3.shivering-isles.com/demo/uploads/upload_58c824142e3b35e0f1a2ced2e1e43811.png)
+
+In particular, for readability we do not show:
+- `:ping` and `:pong` messages between Leaders for failure detection
+- Debugging messages for the Monitor (nor the Monitor itself)

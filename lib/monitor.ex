@@ -4,7 +4,6 @@
 # coursework, paxos made moderately complex
 
 defmodule Monitor do
-
   # setters for Monitor state variables
   def clock(state, v), do: Map.put(state, :clock, v)
 
@@ -115,26 +114,24 @@ defmodule Monitor do
         sorted = state.requests |> Map.to_list() |> List.keysort(0)
         IO.puts("time = #{clock} client requests seen = #{inspect(sorted)}")
 
-          min_done = state.updates |> Map.values() |> Enum.min(fn -> 0 end)
-          n_requests = state.requests |> Map.values() |> Enum.sum()
+        min_done = state.updates |> Map.values() |> Enum.min(fn -> 0 end)
+        n_requests = state.requests |> Map.values() |> Enum.sum()
 
-          IO.puts(
-            "time = #{clock}           total seen = #{n_requests} max lag = #{
-              n_requests - min_done
-            }"
-          )
+        IO.puts(
+          "time = #{clock}           total seen = #{n_requests} max lag = #{n_requests - min_done}"
+        )
 
-          sorted = state.scouts_spawned |> Map.to_list() |> List.keysort(0)
-          IO.puts("time = #{clock}       scouts spawned = #{inspect(sorted)}")
-          sorted = state.scouts_finished |> Map.to_list() |> List.keysort(0)
-          IO.puts("time = #{clock}          scouts down = #{inspect(sorted)}")
+        sorted = state.scouts_spawned |> Map.to_list() |> List.keysort(0)
+        IO.puts("time = #{clock}       scouts spawned = #{inspect(sorted)}")
+        sorted = state.scouts_finished |> Map.to_list() |> List.keysort(0)
+        IO.puts("time = #{clock}          scouts down = #{inspect(sorted)}")
 
-          sorted = state.commanders_spawned |> Map.to_list() |> List.keysort(0)
-          IO.puts("time = #{clock}        commanders up = #{inspect(sorted)}")
-          sorted = state.commanders_finished |> Map.to_list() |> List.keysort(0)
-          IO.puts("time = #{clock}      commanders down = #{inspect(sorted)}")
-          sorted = state.active_leaders |> Map.to_list() |> List.keysort(0)
-          IO.puts("time = #{clock}       active leaders = #{inspect(sorted)}")
+        sorted = state.commanders_spawned |> Map.to_list() |> List.keysort(0)
+        IO.puts("time = #{clock}        commanders up = #{inspect(sorted)}")
+        sorted = state.commanders_finished |> Map.to_list() |> List.keysort(0)
+        IO.puts("time = #{clock}      commanders down = #{inspect(sorted)}")
+        sorted = state.active_leaders |> Map.to_list() |> List.keysort(0)
+        IO.puts("time = #{clock}       active leaders = #{inspect(sorted)}")
 
         IO.puts("")
         Monitor.start_print_timeout(config.print_after)
@@ -143,9 +140,9 @@ defmodule Monitor do
       # ** ADD ADDITIONAL MONITORING MESSAGES OF YOUR OWN HERE
 
       {:LEADER_ACTIVE, active?, server_num} ->
-          active = Map.put(state.active_leaders, server_num, active?)
-          state = Map.put(state, :active_leaders, active )
-          Monitor.next(config, state)
+        active = Map.put(state.active_leaders, server_num, active?)
+        state = Map.put(state, :active_leaders, active)
+        Monitor.next(config, state)
 
       unexpected ->
         Util.halt("monitor: unexpected message #{inspect(unexpected)}")

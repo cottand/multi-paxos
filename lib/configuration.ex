@@ -37,7 +37,7 @@ defmodule Configuration do
       crash_server: %{},
       # Use pinging to prevent livelock between leaders
       prevent_livelock: false,
-      debug_level: 1,
+      debug_level: 1
     }
   end
 
@@ -67,6 +67,7 @@ defmodule Configuration do
       client_sleep: 500
     })
   end
+
   # Less chatty, with more requests
   def params(:debug2) do
     Map.merge(params(:default), %{
@@ -85,7 +86,6 @@ defmodule Configuration do
     })
   end
 
-
   # -----------------------------------------------------------------------------
   # Benchmarking configs
 
@@ -93,53 +93,53 @@ defmodule Configuration do
     Map.merge(params(:default), %{
       debug_level: 1,
       max_requests: 100,
-      client_sleep: 10,
+      client_sleep: 10
     })
   end
 
   def params(:low_load_prevent_livelock) do
     Map.merge(params(:low_load), %{
-      prevent_livelock: true,
+      prevent_livelock: true
     })
   end
 
   def params(:low_load_prevent_livelock_crash_1_server) do
     Map.merge(params(:low_load), %{
       prevent_livelock: true,
-      crash_server: %{1 => 500},
+      crash_server: %{1 => 500}
     })
   end
 
   def params(:high_load) do
     Map.merge(params(:default), %{
       max_requests: 1000,
-      client_sleep: 5,
+      client_sleep: 5
     })
   end
 
   def params(:high_load_prevent_livelock) do
     Map.merge(params(:high_load), %{
-      prevent_livelock: true,
+      prevent_livelock: true
     })
   end
 
   def params(:high_load_prevent_livelock_crash_1_server) do
     Map.merge(params(:high_load), %{
       prevent_livelock: true,
-      crash_server: %{1 => 5000},
+      crash_server: %{1 => 5000}
     })
   end
 
   def params(:very_high_load) do
     Map.merge(params(:default), %{
       max_requests: 5000,
-      client_sleep: 2,
+      client_sleep: 2
     })
   end
 
   def params(:very_high_load_prevent_livelock) do
     Map.merge(params(:very_high_load), %{
-      prevent_livelock: true,
+      prevent_livelock: true
     })
   end
 end

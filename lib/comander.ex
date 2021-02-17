@@ -18,7 +18,14 @@ defmodule Commander do
             exitC(config)
           end
 
-          next(leader_pid, acceptors, replicas, {ballot, slot, command}, acceptors_waiting, config)
+          next(
+            leader_pid,
+            acceptors,
+            replicas,
+            {ballot, slot, command},
+            acceptors_waiting,
+            config
+          )
         else
           send(leader_pid, {:preempted, new_ballot})
           exitC(config)
@@ -27,7 +34,7 @@ defmodule Commander do
   end
 
   defp exitC(config) do
-    send config.monitor, {:COMMANDER_FINISHED, config.node_num }
+    send(config.monitor, {:COMMANDER_FINISHED, config.node_num})
     exit(:normal)
   end
 end

@@ -30,7 +30,7 @@ defmodule Scout do
         )
 
         if new_ballot == ballot do
-          # Util.log(config, :DEBUG, "scout: commands received are #{inspect r}, updating pvalues #{inspect pvalues}")
+          Util.log(config, :DEBUG, "scout: commands received are #{inspect r}, updating pvalues #{inspect pvalues}")
           pvalues = MapSet.union(pvalues, r)
           waitfor = MapSet.delete(waitfor, acceptor)
 
@@ -43,9 +43,7 @@ defmodule Scout do
             "scout: received p1b from #{all_acceptors - waiting_still}/#{all_acceptors}"
           )
 
-          # TODO what happens when we have 2 servers only??
           if waiting_still < all_acceptors / 2 do
-            # FIXME we never reach this - we only ever receive a single :p1b
             send(leader, {:adopted, ballot, pvalues})
             stop(config)
           end

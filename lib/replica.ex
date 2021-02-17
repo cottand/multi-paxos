@@ -32,7 +32,6 @@ defmodule Replica do
 
   @spec propose(replica_state) :: replica_state()
   defp propose(state) do
-    # FIXME do we do reconfig options?
     slot_in = state.slot_in
     cmd = Enum.find(state.requests, nil, fn _ -> true end)
 
@@ -102,7 +101,6 @@ defmodule Replica do
       Enum.find(state.decisions, {nil, nil}, fn {slot_num, _} -> slot_num == slot_out end)
 
     if decided_cmd != nil do
-      # we assume there are no such things as reconfiguration commands
       {proposals, requests} =
         if Map.has_key?(proposals, slot_out) do
           proposed_cmd = Map.get(proposals, slot_out)
