@@ -6,6 +6,10 @@
 
 # make options for Multipaxos
 
+To see possible running ocnfiguraitons, see configuration.ex file.
+Change running configurations as variable in Makefile.
+The prevent_livelock ones are the most relevant ones.
+
 CLEAN UP
 --------
 make clean   - remove compiled code
