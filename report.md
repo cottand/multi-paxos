@@ -1,7 +1,6 @@
 # Multi-Paxos Elixir Implementation Report
 
-**6009 Distributed Algorithms Coursework**  
-Nicolas D'Cotta (nd3018) and William Profit (wtp18)
+Nicolas D'Cotta, William Profit
 
 ## Design and Implementation
 
@@ -69,9 +68,6 @@ fail. We implement this failure detection to quickly preempt faulty leaders
 even if the $t_{wait}$ of $\lambda$ is large.
 
 ## Debugging and Testing Methodology
-
-We extended `Monitor` by adding an _active leaders_ field. Particularly
-useful in testing liveliness, and determining when a slow system is 'stuck'.
 
 We use a `Util.log()` helper function extensively, which takes a 'debug
 level' atom which serves as logging instrumentation for the application. In

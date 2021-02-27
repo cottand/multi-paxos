@@ -1,11 +1,3 @@
-# Nicolas D'Cotta (nd3018) and William Profit (wtp18)
-
-
-# distributed algorithms, n.dulay, 29 jan 21
-# coursework, paxos made moderately complex
-
-# make options for Multipaxos
-
 To see possible running ocnfiguraitons, see configuration.ex file.
 Change running configurations as variable in Makefile.
 The prevent_livelock ones are the most relevant ones.

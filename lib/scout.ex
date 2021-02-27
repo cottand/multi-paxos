@@ -1,5 +1,3 @@
-# Nicolas D'Cotta (nd3018) and William Profit (wtp18)
-
 defmodule Scout do
   @spec start(MapSet.t(pid), MapSet.t(pid), Util.ballot(), %{
           :monitor => pid,

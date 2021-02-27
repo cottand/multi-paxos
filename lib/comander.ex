@@ -1,5 +1,3 @@
-# Nicolas D'Cotta (nd3018) and William Profit (wtp18)
-
 defmodule Commander do
   def start(leader_pid, acceptors, replicas, {ballot, slot, command}, config) do
     send(config.monitor, {:COMMANDER_SPAWNED, config.node_num})

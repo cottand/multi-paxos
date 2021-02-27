@@ -1,9 +1,3 @@
-# Nicolas D'Cotta (nd3018) and William Profit (wtp18)
-
-
-# distributed algorithms, n.dulay, 29 jan 21 
-# coursework, paxos made moderately complex
-
 SERVERS  = 5
 CLIENTS  = 5
 CONFIG   = high_load_prevent_livelock_crash_1_server

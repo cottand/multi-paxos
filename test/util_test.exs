@@ -1,5 +1,3 @@
-# Nicolas D'Cotta (nd3018) and William Profit (wtp18)
-
 defmodule UtilTest do
   use ExUnit.Case
   import Util

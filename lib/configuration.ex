@@ -1,8 +1,3 @@
-# Nicolas D'Cotta (nd3018) and William Profit (wtp18)
-
-# distributed algorithms, n.dulay 29 jan 2021
-# coursework, paxos made moderately complex
-
 defmodule Configuration do
   def node_id(config, node_type, node_num \\ "") do
     Map.merge(
