@@ -11,9 +11,9 @@ We model several servers, each of which maintains a replica of a ledger. The all
 
 The resulting architecture is not simple:
 
-![](https://codimd.s3.shivering-isles.com/demo/uploads/upload_58c824142e3b35e0f1a2ced2e1e43811.png)
+![mPaxosUml](https://user-images.githubusercontent.com/45274424/109385932-8e06d600-78f7-11eb-817a-f1dc5d802574.png)
 
-![](https://codimd.s3.shivering-isles.com/demo/uploads/upload_f95e10d340bc28219674778beb8d3fd6.png)
+![MPaxos-diagram](https://user-images.githubusercontent.com/45274424/109385879-323c4d00-78f7-11eb-8434-6eeaab1bfaf9.png)
 
 
 Every module is its own Elixir process, and no global concurrency primitives (like locks or semaphores) are used at all. This is a non-blocking, partially asynchronous distributed system.
