@@ -3,7 +3,7 @@
 This is an Elixir implementation of a variant of the Paxos algorithm,
 as described in the paper [Paxos Made Moderately Complex](https://dl.acm.org/doi/10.1145/2673577) _(Robbert van Renesse and Deniz Altınbüken)_. Paxos is a [consensus algorithm](https://en.wikipedia.org/wiki/Consensus_(computer_science)), a fundamental problem in distributed computing. 
 
-We model several servers, each of which maintains a replica of a ledger. The all Service a number of clients, who broadcast transactions. Our ledger replicas must guarantee:
+We model several servers, each of which maintains a replica of a ledger. They all Service a number of clients, who broadcast transactions. Our ledger replicas must guarantee:
 - **Consistency**: transactions are appended in the same order to all ledgers
 - **Liveness**: all transactions will eventually be appended
 - **Safety**: only transactions broadcast by clients will be appended
