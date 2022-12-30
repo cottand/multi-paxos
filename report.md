@@ -25,9 +25,13 @@ leader's PID, we initially set out to order ballots by hashing the string
 representation of their PIDs. We later found that two different PIDs may have
 the same string representation, effetively making leaders _not_ totally
 ordered. Instead, we adopt an approach where a ballot is a tuple of three
-(rather than two) elements: $<b_{number}, \texttt{server\_num},
-process_{id}>$. We then only use the ballot number $b_{number}$ and the node
-id $\texttt{server\_num}$ to lexicographically order ballots.
+(rather than two) elements: 
+$(b_{number}, \texttt{server-num} ,process_{id})$
+
+We then only use the ballot number $b_{number}$ and the node
+id `server-num` to lexicographically order ballots.
+
+
 
 ### Data Structures
 
